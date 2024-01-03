@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      text-align: center;
+    }
+    .title{
+      font-weight: bold;
+      font-size: 24px;
+      /* text-align: center; */
+      margin: 30px 0;
+    }
+    
+    /* 글자 수직 중앙 정렬 => line-heigt : 높이만큼 주면 됨 */
+    .box{
+      /* border : 1px solid black; */
+      width: 600px;
+      height: 120px;
+      /* 컨첸츠를 중앙 정렬 시켜줌 */
+      margin: auto;
+      /* 글자의 높이 */
+      line-height: 120px;
+      background-image: linear-gradient(red,orange);
+      transition: 0.3s;
+    }
+    span{
+      
+      font-size: 32px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .box:hover span{
+      line-height: 50px;
+    }
+    span:nth-child(1){ transition: 0.2s ease-in-out 0s;}
+    span:nth-child(2){ transition: 0.3s ease-in-out 0s; }
+    span:nth-child(3){}
+    span:nth-child(4){}
+    span:nth-child(5){}
+    span:nth-child(6){}
+    span:nth-child(7){}
+    span:nth-child(8){}
+    span:nth-child(9){}
+  </style>
+</head>
+<body>
+  <div class="title">박스 위에 마우스를 올려보세요!</div>
+  <div class="box">
+    <span>T</span>
+    <span>R</span>
+    <span>A</span>
+    <span>N</span>
+    <span>S</span>
+    <span>F</span>
+    <span>O</span>
+    <span>R</span>
+    <span>M</span>
+  </div>
+</body>
+</html>
