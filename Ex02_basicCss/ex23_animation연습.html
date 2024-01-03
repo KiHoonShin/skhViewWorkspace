@@ -46,11 +46,14 @@
       font-size : 40px;
       color : rgb(231, 231, 8);
       margin-top: 10px;
-      animation: turn 1s ease-in-out infinite;
+      animation: turn 0.7s ease-in-out alternate infinite;
     }
     @keyframes turn{
-      0%{
-        transform: translateX(25%);
+      from{
+        transform: scaleX(0);
+      } 
+      to{
+        transform: scale(1);
       }
     }
   </style>
