@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    section{
+      /* border: 1px solid black; */
+      display: flex;
+    }
+    section article:nth-child(1){
+      flex:1;
+      background-color: yellow;
+      padding: 0 10px;
+    }
+    section article:nth-child(2){
+      flex:1;
+    }
+    article div{
+      display: flex;
+      
+    }
+    article div:nth-child(1){
+      flex:1;
+      flex-direction: column;
+      padding: 0 10px;
+      background-color: rgb(178, 200, 247);
+    }
+    article div:nth-child(2){
+      flex:1;
+      flex-direction: column;
+      padding: 0 10px;
+      background-color: rgb(250, 98, 129);
+    }
+
+    @media(max-width :768px){
+      body{
+        align-items: flex-start;
+      }
+      section{
+        
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+    <section>
+      <article>
+        <h2>content1</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatem tenetur doloremque perferendis, ratione at corporis voluptatibus? Rem molestiae explicabo minima fugit nulla ab accusamus perferendis placeat quisquam exercitationem eveniet, blanditiis molestias saepe autem voluptatibus eaque est repellat optio error natus. Aut quod doloribus ratione, laboriosam reprehenderit illo inventore explicabo culpa eos ipsum qui ullam, deserunt fugit. Excepturi eius eum ipsum consectetur, earum qui quasi odit minus architecto delectus a.
+        </p>
+      </article>
+      <article>
+        <div>
+          <h2>sub1</h2>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis et excepturi, libero cupiditate laboriosam minus necessitatibus soluta accusamus ab, voluptas eos, ea aliquam illo dicta illum autem hic enim! Autem?
+          </p>
+        </div>
+        <div>
+          <h2>sub2</h2>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus laborum ullam voluptate a quidem illo mollitia magnam ad, maxime odio ipsam nesciunt voluptatibus. Quae doloremque iusto magnam deleniti cumque corporis!
+          </p>
+        </div>
+      </article>
+    </section>
+</body>
+</html>
