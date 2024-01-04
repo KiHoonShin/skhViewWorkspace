@@ -1,67 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    body{
+    /* resetCSS */
+    body {
       margin: 0;
       height: 100vh;
-      width: 100%;
-      display: flex;
     }
-    section{
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+    }
+
+    header,
+    .banner,
+    nav,
+    article {
+      padding: 30px;
+      text-transform: capitalize;
+    }
+
+    .container {
+      height: 100%;
+      border: 1px solid black;
       display: flex;
       flex-direction: column;
     }
-    section article{
-      
-    }
-    .Header{
-      flex: 1;
+
+    header {
       background-color: yellow;
-      padding: 10px;
     }
-    .Banner{
-      flex: 1;
-      background-color: rgb(104, 241, 104);
-      padding: 10px;
+
+    .banner {
+      background-color: yellowgreen;
     }
-    .Main{
-      flex: 8;
+
+    section {
       display: flex;
-    }
-    .sub1{
       flex: 1;
-      background-color: rgb(241, 140, 174);
-      padding: 10px;
     }
-    .sub2{
-      flex: 7;
-      background-color: lightblue;
-      padding: 10px;
+
+    nav {
+      background-color: palevioletred;
+      width: 200px;
+    }
+
+    article {
+      background-color: skyblue;
+      flex: 1;
     }
   </style>
 </head>
+
 <body>
-  <section>
-    <article class="Header">
-      <h3>Header</h3>
-    </article>
-    <article class="Banner">
-      <h3>Banner</h3>
-    </article>
-    <article class = "Main">
-      <div class="sub1">
-        <h3>Navi</h3>
-      </div>
-      <div class="sub2">
-        <h3>Main</h3>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati quam provident veritatis magnam facilis placeat labore eligendi velit aut a quibusdam facere modi qui voluptatum deleniti earum ipsa, quo rerum sunt neque eius illo? Ut animi explicabo accusamus odit rem id, eos pariatur officia aspernatur dolores deleniti optio vitae expedita eum laudantium molestiae tempora dolore eveniet quos repudiandae necessitatibus corrupti, distinctio dignissimos. Quidem commodi laborum sapiente voluptatum porro ratione aliquid?
+  <div class="container">
+    <header>
+      <h2>header</h2>
+    </header>
+    <div class="banner">
+      <h2>banner</h2>
+    </div>
+    <section>
+      <nav>
+        <h2>navi</h2>
+      </nav>
+      <article>
+        <h2>Main</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque eos fugiat exercitationem nisi! Quae,
+          asperiores est voluptate alias magnam debitis labore in, veritatis, dolorem adipisci at cum! Praesentium,
+          fugiat! Fugit consequuntur, necessitatibus nisi assumenda debitis natus cumque voluptate rerum aliquam
+          veritatis. Necessitatibus voluptatum esse, alias officia, aliquid quaerat odit dolorum totam amet, tenetur
+          quae! At ab officiis autem molestiae adipisci quidem illo, odio repellendus aut quo eum voluptate itaque illum
+          magni nostrum vero expedita dolor repudiandae consequatur! Quas unde recusandae, adipisci quo sed quam
+          consectetur commodi magnam nemo maiores ab accusamus minima tempora optio nobis labore, doloribus incidunt
+          perspiciatis. Assumenda?
         </p>
-    </article>
-  </section>
+      </article>
+    </section>
+
+  </div>
 </body>
+
 </html>
