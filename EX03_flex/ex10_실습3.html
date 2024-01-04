@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      margin : 0;
+      height: 100vh;
+    }
+    .container{
+      border: 1px solid black;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      line-height: 100px;
+    }
+
+    /* .container div{
+      height: 100%;
+    } */
+    
+    .header{
+      background-color: crimson;
+      flex:1.5;
+
+    }
+    .section{
+      border: 2px solid red;
+      flex:7.5;
+      display: flex;
+    }
+
+    .section div{
+      height : 100%;
+    }
+    .section .article:nth-child(1){
+      flex: 2;
+      background-color: yellow;
+
+    }
+    .section .article:nth-child(2){
+      flex:8;
+      background-color: lightgray;
+    }
+    .section .article:nth-child(3){
+      flex: 2;
+      background-color: rgb(122, 216, 122);
+    }
+
+    .footer{
+      background-color: aquamarine;
+      flex: 1.5;
+
+    }
+    @media(max-width:768px){
+      .container{
+        width:100%;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">header</div>
+    <div class="section">
+      <div class="article">left</div>
+      <div class="article">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ea incidunt, odio laboriosam nihil iste perferendis placeat distinctio unde, temporibus voluptas aspernatur quaerat quidem quas rem, a ratione cumque perspiciatis.</div>
+      <div class="article">right</div>
+    </div>
+    <div class="footer">footer</div>
+  </div>
+</body>
+</html>
