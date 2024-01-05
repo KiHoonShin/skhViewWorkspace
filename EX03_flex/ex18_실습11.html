@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      margin:0;
+      height: 100vh;
+      display: flex;
+    }
+    .container{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    header{
+      height: 100px;
+      background-color: palevioletred;
+    }
+    main{
+      flex : 1;
+      /* container에서 flex , main에서 flex:1
+      대신 아래 height 길이구하기로 줄일 수 있음
+      */
+      /* height: calc(100% - 200px); */
+      display: flex;
+    }
+    nav{
+      width: 100px;;
+      background-color: pink;
+    }
+    main article{
+      flex:1;
+    }
+    main aside{
+      width: 80px;
+      background-color: lightgray;
+    }
+    footer{
+      height: 100px;
+      background-color: palevioletred;
+    }
+    header, nav, main article, main aside,footer{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <nav>Nav</nav>
+  <div class="container">
+    <header>Header</header>
+    <main>
+      <article>Article</article>
+      <aside>Aside</aside>
+    </main>
+    <footer>Footer</footer>
+  </div>
+</body>
+</html>
