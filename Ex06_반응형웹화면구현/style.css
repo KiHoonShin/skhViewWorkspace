@@ -1,0 +1,52 @@
+/* Fontawesome 4.7 */
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'); 
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
+/* reset css */
+a{ text-decoration: none; color: #222;}
+h1,h2,h3,h4,h5,h6{ margin:0;}
+button{cursor: pointer; outline: none;}
+body{
+  margin: 0;
+  height: 100vh;
+}
+
+section{
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  /* border: 2px solid black; */
+}
+.media{
+  background-color: lightgray;
+  width:600px;
+  display: flex;
+  box-sizing: border-box;
+  /* font-size: 15; */
+  display: flex;
+}
+.media img{
+  width: 100px;
+  /* height: 100px; */
+  margin-right: 10px;
+  flex : 2;
+}
+.media-body{
+  flex: 5;
+  margin: 0 15px;
+}
+.media-body h3{
+}
+.media-body p{
+  font-size: 15px;
+}
+
+
+/* 모바일 환경 */
+@media screen and (max-width:767px){
+
+}
+
+/* 태블릿 환경 */
+@media (min-width:768px) and(max-width:1024px){
+
+}
