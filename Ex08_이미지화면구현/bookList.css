@@ -14,10 +14,24 @@ input,textarea,select{
 body{
   margin: 0;
   height: 100vh;
-  font-family: 'Montserrat' , sans-serif;
-  /* font-family: 'Noto Sans KR' , sans-serif; */
+  /* font-family: 'Montserrat' , sans-serif; */
+  font-family: 'Noto Sans KR' , sans-serif;
 }
 button,input,textarea,select{
-  /* font-family: 'Noto Sans KR' , sans-serif; */
-  font-family: 'Montserrat' , sans-serif;
+  font-family: 'Noto Sans KR' , sans-serif;
+  /* font-family: 'Montserrat' , sans-serif; */
 }
+
+/* section */
+section{
+  border : 1px solid black;
+  width: 1280px;
+  margin: auto;
+}
+.list-header{}
+.list-header h1{}
+.list-header p{}
+
+/* items */
+.items{}
+.item{}

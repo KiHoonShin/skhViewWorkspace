@@ -1,7 +1,133 @@
 /* Fontawesome 4.7 */
 @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'); 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:300,400,500,700,700&display=swap%27');
 /* reset css */
 a{ text-decoration: none; color: #222;}
-h1,h2,h3,h4,h5,h6{ margin:0;}
+h1,h2,h3,h4,h5,h6{ margin:0; font-weight: normal;}
 button{cursor: pointer; outline: none; border:none;}
+input,textarea,select{
+  outline : none;
+}
+body{
+  margin: 0;
+  height: 100vh;
+  font-family: 'Noto Sans KR' , sans-serif;
+  font-size: 15px;
+  font-weight: 300px;
+
+}
+button,input,textarea,select{
+  font-family: 'Noto Sans KR' , sans-serif;
+}
+
+section{
+  width: 1200px;
+  /* border: 1px solid black; */
+  margin: auto;
+}
+/* header */
+.consulting-header{
+  text-align: center;
+}
+.consulting-header span{
+  color: crimson;
+}
+.consulting-header hr{
+  border: none;
+  width: 100px;
+  height: 3px;
+  background-color: skyblue;
+}
+.consulting-header p{
+  font-size:12px
+}
+/* form */
+.consulting-form form{
+  /* 위에만 선 주고 싶을 때 */
+  border-top: 5px solid #ddd;
+  margin: 30px;
+  /* padding: 30px; */
+}
+form .row{
+  /* border: 1px solid crimson; */
+  display: flex;
+}
+.row .field{
+  display: flex;
+  flex-direction: column;
+  margin-right: 30px;
+  flex:1;
+}
+.row .field label{
+  margin: 5px 0;
+}
+.row .field input , select, textarea{
+  border: 1px solid #ddd;
+  padding: 7px;
+}
+.row .field input:hover, 
+textarea:hover, 
+select:hover{
+  border: 1px solid skyblue;
+  box-shadow: 0 0 5px skyblue;
+}
+.row .field input:focus,
+textarea:focus, 
+select:focus{
+  border: 1px solid skyblue;
+  box-shadow: 0 0 5px skyblue;
+}
+form label em{
+  color: red;
+}
+form textarea{}
+
+/* policy */
+.policy{}
+.policy h4{
+  margin: 10px 0;
+}
+.policy iframe{
+  border : 1px solid black;
+  width: 100%;
+  height: 100px;
+  border-radius: 3px;
+  padding: 7px;
+  /* iframe은 외부 화면만 조정할 수 있다 : 독립존재하는 html 문서이기 때문 */
+  /* 따라서 iframe 폰트 색상 ,크기 등 조절 불가 */
+}
+.btn-sumbit{
+  padding: 10px 50px;
+  border-radius: 3px;
+  background-color: skyblue;
+  color: white;
+  display: block;
+  /* margin : auto는 display가 block일때만 사용가능 */
+  margin: auto;
+  margin-top: 20px;
+}
+
+.btn-sumbit:hover{
+  background-color: royalblue;
+  color: #fff;
+}
+
+@media(max-width:768px){
+  section{
+    width: 100%;
+    box-sizing: border-box;
+  }
+  form .row{
+    flex-direction: column;
+  }
+  .row .field{
+    margin: 5px 0;
+  }
+  /* form .row:nth-child(1){
+    margin-top: 30px;
+  } */
+  .btn-sumbit{
+    width: 100%;
+    color: black;
+  }
+}
