@@ -21,3 +21,15 @@ button,input,textarea,select{
   /* font-family: 'Noto Sans KR' , sans-serif; */
   font-family: 'Montserrat' , sans-serif;
 }
+
+/* 모바일 모드 */
+@media (max-width:767px){
+
+}
+
+/* 화면분할 : ctrl + 역슬러쉬 */
+
+/* 태블릿 모드 */
+@media (min-width: 768px) and (max-width:1024px){
+
+}

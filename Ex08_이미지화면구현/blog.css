@@ -1,0 +1,123 @@
+/* Google Web Font */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:300,400,500,700,700&display=swap');
+/* Fontawesome 4.7 */
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+/* reset CSS */
+a{ text-decoration: none; color: #222;}
+h1,h2,h3,h4,h5,h6{ margin: 0; font-weight: normal;}
+button{ cursor: pointer; outline: none; border: none;}
+input,textarea,select{
+  outline: none;
+}
+
+body{
+  margin: 0;
+  height: 100vh;
+  font-family: 'Montserrat' , sans-serif;
+  /* font-family: 'Noto Sans KR' , sans-serif; */
+}
+button,input,textarea,select{
+  /* font-family: 'Noto Sans KR' , sans-serif; */
+  font-family: 'Montserrat' , sans-serif;
+}
+
+section{
+  width: 1000px;
+  margin: auto;
+  /* border: 2px solid red; */
+  display: flex;
+}
+.item{
+  display: flex;
+}
+
+.blog-img{
+  width:250px;
+  overflow: hidden;
+}
+
+/* odd = 홀수  , even = 짝수 */
+.item:nth-child(odd){
+  flex-direction: column;
+}
+.item:nth-child(even){
+  flex-direction: column-reverse;
+}
+
+/* img 인라인 블럭 -> 자체적으로 마진이 있음. display : block으로 마진 없애기  */
+.blog-img img{
+  width: 100%;
+  display: block;
+  /* margin-bottom: 10px; */
+  transition: 0.3s;
+}
+
+.blog-img img:hover{
+  transform: scale(1.05);
+}
+
+.post{
+  /* flex:1; */
+  color: white;
+  text-align: center;
+  background-color:rgb(56, 226, 226);
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.post h2{
+  padding-top: 20px;
+}
+.post p{
+  padding: 20px;
+}
+
+/* 모바일 모드 */
+@media (max-width:767px){
+  section{
+    width:100%;
+    flex-wrap: wrap;
+    /* padding: 30px; */
+    box-sizing: border-box;
+  }
+
+  .item:nth-child(odd){
+    flex-direction: column;
+  }
+  .item:nth-child(even){
+    flex-direction: column;
+  }
+  .blog-img{
+    width: 100%;
+    flex: 2;
+  }
+  .post{
+    flex:1;
+  }
+}
+
+/* 태블릿 모드 */
+@media (min-width: 768px) and (max-width:1024px){
+  section{
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 30px;
+    box-sizing: border-box;
+  }
+  /* .item{
+    flex-direction: column;
+  } */
+  .item:nth-child(odd){
+    flex-direction: row;
+  }
+  .item:nth-child(even){
+    flex-direction: row-reverse;
+  }
+  .item .blog-img , .item .post{
+    flex:1;
+    height: 100%;
+  }
+
+}
