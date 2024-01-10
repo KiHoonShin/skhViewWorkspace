@@ -83,6 +83,26 @@ nav{
   justify-content: space-between;
   /* margin-top: 20px; */
 }
+
+/* 스크롤 내리면 상단바 고정 */
+header.active{
+  position: fixed;
+  background-color: white;
+  
+}
+header.active .banner{
+  opacity: 0;
+}
+header.active nav{
+  /* background-color: white; */
+}
+header.active .logo{
+  /* position: absolute; */
+}
+header.active .gnb li a{
+  color:black;
+}
+
 .logo{
 }
 .logo img{}

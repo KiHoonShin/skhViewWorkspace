@@ -1,0 +1,15 @@
+@media (max-width:768px){
+  /* width 고정 == 100% */
+  /* flex : row -> column */
+  .banner{
+    /* width: 100%; */
+    flex-direction: column;
+  }
+  .about-content{
+    width: 100%;
+    flex-direction: column;
+  }
+  .desc{
+    width: 100%;
+  }
+}
