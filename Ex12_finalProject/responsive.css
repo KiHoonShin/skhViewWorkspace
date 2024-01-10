@@ -5,6 +5,9 @@
     /* width: 100%; */
     flex-direction: column;
   }
+  .inner{
+    width: 100%;
+  }
   .about-content{
     width: 100%;
     flex-direction: column;
