@@ -237,26 +237,76 @@ before 인라인요소임 -> 포지션을주면 인라인 블록으로 바뀜 */
 }
 .festival-heading h3{
   color: #fff;
-  margin-bottom: 15px;
-  font-size: 22px;
+  margin-bottom: 30px;
+  font-size: 26px;
+  font-weight: 300;
 }
 .festival-heading h3 span{
-  font-weight: bold;
+  font-weight: 500;
 }
-.bnts{}
-.bnts a{
-  padding: 5px 15px;
+.btns{}
+.btns a{
+  display: inline-block;
+  width: 200px;
+  padding: 6px;
+  margin: 5px;
+  font-size: 16px;
   border-radius: 5px;
-  margin: 0 4px;
 }
-.bnts a:nth-child(1){
+.btns a:nth-child(1){
 background-color: orange;
 color: white;
 }
-.bnts a:nth-child(2){
+.btns a:nth-child(2){
   background-color: white;
+  color: #222;
 }
 /* footer */
+footer{
+  /* height: 200px; */
+  border: 2px solid green;
+  background-color: black;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer-content{
+  /* margin: 15px 0; */
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+}
+.footer-content ul{
+  color:#a8a7a7;
+  text-align: center;
+  
+}
+.footer-content ul li{
+}
+.footer-content ul li:nth-child(1){
+  font-weight: bold;
+  color: #fff;
+}
+.footer-content ul li a{
+  color:#a8a7a7;
+}
+.footer-content ul li a:hover{
+  text-decoration: underline;
+}
+.community{
+  flex:1;
+}
+.network{
+  flex:1;
+}
+.help{
+  flex:2;
+}
+.help li:last-child{
+  color:#fff;
+  margin-top: 45px;
+}
 
 
 
