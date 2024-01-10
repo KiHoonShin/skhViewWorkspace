@@ -1,0 +1,279 @@
+/* Google Web Font */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:300,400,500,700,700&display=swap');
+/* Fontawesome 4.7 */
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+/* reset CSS */
+a{ text-decoration: none; color: #222;}
+h1,h2,h3,h4,h5,h6{ margin: 0; font-weight: normal;}
+button{ cursor: pointer; outline: none; border: none;}
+ul{
+  margin: 0; padding: 0; list-style:none
+}
+input,textarea,select{
+  outline: none;
+}
+button,input,textarea,select{
+  /* font-family: 'Noto Sans KR' , sans-serif; */
+  font-family: 'Montserrat' , sans-serif;
+}
+body{
+  margin: 0;
+  height: 100vh;
+  font-family: 'Montserrat' , sans-serif;
+  /* font-family: 'Noto Sans KR' , sans-serif; */
+  line-height: 1.5em;
+}
+
+.container{
+  height: 100%;
+}
+
+/* common CSS */
+.inner{
+  border: 1px solid blue;
+  width : 1300px;
+  margin: auto;
+}
+
+/* header */
+header{
+  /* border: 1px solid black; */
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+.banner{
+  /* width:1300px; */
+  border: 1px solid blue;
+  background-color: black;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.lnb{
+  width: 1300px;
+  /* border: 1px solid plum; */
+  margin: auto;
+  text-align: right;
+  }
+.lnb a{
+  color : #ddd;
+  margin: 5px;
+}
+.lnb a:last-child{
+  margin: 0;
+}
+.lan a em{
+  color: #bbbbbbd0;
+}
+
+nav{
+  
+  width: 1300px;
+  /* border: 1px solid red; */
+  /* background-color: lightgray; */
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* margin-top: 20px; */
+}
+.logo{
+}
+.logo img{}
+.gnb{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gnb{
+
+}
+/* .gnb li{} */
+.gnb li a{
+  margin: 20px;
+  color : white;
+}
+.gnb li a:last-child{
+  margin-right:0;
+}
+.gnb li a:hover{
+  color: #222;
+}
+
+
+/* intro */
+.intro{
+  /* border: 1px solid red; */
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('images/intro.jpg') no-repeat center center;
+  background-size: cover;
+}
+.heading{
+  color : #fff;
+  text-align: center;
+}
+.heading h1{
+  font-size: 56px;
+  margin-bottom: 30px;
+  /* font-weight: 500; */
+}
+.heading p{
+  font-size: 22px;
+  line-height: 1.5em;
+  padding: 0 150px;
+}
+
+
+/* about */
+.about{}
+.about-content{
+  display: flex;
+  padding: 150px 0;
+}
+.about-content > div{
+  padding: 30px;
+}
+.desc{
+  text-align: center;
+  /* padding: 10px; */
+  flex:3;
+  /* margin-right: 40px; */
+}
+.desc h2{
+  margin-bottom: 30px;
+  font-size: 30px;
+}
+.desc p{
+  font-size: 16px;
+  line-height: 1.7em;
+}
+.desc a{
+  color: brown;
+  font-weight: bold;
+}
+.desc a:hover{
+  text-decoration: underline;
+}
+.photo{
+  flex:2;
+  /* width: 500px; */
+}
+.photo img{
+  width: 100%;
+  border-radius: 40% 60% 65% 35% / 40% 45% 55% 60%;
+}
+
+/* ranking */
+
+/* testimonial */
+
+/* callaction */
+.callaction{
+  height: 450px;
+  background: url('images/callaction-01.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+/* 가상 선택자의 부모 */
+  position: relative;
+}
+/* 가상 선택자를 사용할때 1. content:'' , 
+before 인라인요소임 -> 포지션을주면 인라인 블록으로 바뀜 */
+.callaction::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: palegreen;
+  background: linear-gradient(to right bottom, rgba(78, 0, 78, 0.4), rgba(255, 255, 0, 0.226));
+}
+/* position => 레이아웃을 겹치는 것 : absolute 보다 relative가 우선순위 */
+/* 조건 : z-index 없을때 */
+.callaction-heading{
+  text-align: center;
+  /* position: relative; */
+  z-index: 100;
+}
+.callaction-heading h2{
+  color: #fff;
+  line-height: 1.3em;
+  font-size: 48px;
+  font-weight: 300;
+  /* 글씨 사이 좁히기 */
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+}
+.callaction-heading span{
+  font-weight: 500;
+}
+
+.callaction-heading a{
+  background-color: rgb(25, 145, 25);
+  color: #fff;
+  /* display: inline-block; */
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+/* festival */
+.festival{
+  height: 270px;
+  border: 2px solid red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(59, 59, 59);
+}
+.festival-heading{
+  text-align: center;
+}
+.festival-heading h3{
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+.festival-heading h3 span{
+  font-weight: bold;
+}
+.bnts{}
+.bnts a{
+  padding: 5px 15px;
+  border-radius: 5px;
+  margin: 0 4px;
+}
+.bnts a:nth-child(1){
+background-color: orange;
+color: white;
+}
+.bnts a:nth-child(2){
+  background-color: white;
+}
+/* footer */
+
+
+
+
+
+
+
+
+
+/* 모바일 모드 */
+@media (max-width:767px){
+
+}
+
+/* 화면분할 : ctrl + 역슬러쉬 */
+
+/* 태블릿 모드 */
+@media (min-width: 768px) and (max-width:1024px){
+
+}
