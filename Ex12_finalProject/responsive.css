@@ -10,6 +10,8 @@
     flex-direction: column;
   }
   .desc{
-    width: 100%;
+    flex-direction: column;
+  }
+  .desc h2{
   }
 }

@@ -46,6 +46,7 @@ header{
   width: 100%;
   top: 0;
   left: 0;
+  z-index: 1000;
 }
 .banner{
   /* width:1300px; */
@@ -91,7 +92,7 @@ header.active{
   
 }
 header.active .banner{
-  opacity: 0;
+  display: none;
 }
 header.active nav{
   /* background-color: white; */
