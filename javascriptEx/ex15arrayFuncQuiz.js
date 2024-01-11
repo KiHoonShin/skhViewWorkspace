@@ -30,11 +30,15 @@ let res = pets.find((obj) => obj.kind === '개');
 console.log(res);
 console.log('2번')
 // 2. 동물의 kind가 고양이가 아닌것만 빼서 배열로 만들어라
-for (let i = 0; i < pets.length; i += 1) {
-  if (pets[i].kind != "고양이") {
-    console.log(pets[i]);
-  }
-}
+// for (let i = 0; i < pets.length; i += 1) {
+//   if (pets[i].kind != "고양이") {
+//     console.log(pets[i]);
+//   }
+// }
+let q2 = pets.filter((obj) => obj.kind != "고양이");
+console.log(q2);
+
+
 console.log('3번')
 // 3. 총 동물의 평균 나이를 구해라
 
