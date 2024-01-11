@@ -13,17 +13,25 @@ for (let i = 15; i >= 4; i -= 1) {
   console.log(i);
 }
 
-function printArray(a, b) {
-  if (a < b) {
-    for (let i = a; i <= b; i += 1) {
-      console.log(i + " ");
-    }
-  } else if (a > b) {
-    for (let i = a; i >= b; i -= 1) {
-      console.log(i);
-    }
+// 문제 : 함수로 위 반복문들을 출력하여라
+
+function printArray(start, end) {
+  if (isNaN(start) || isNaN(end)) return '숫자값을 넣어주세요 ';
+  if (end < start) {
+    let temp = start;
+    start = end;
+    end = temp;
   }
+  let result = '';
+  for (let i = start; i <= end; i += 1) {
+    result += i + " ";
+  }
+  return result;
 }
 
-// printArray(1, 5);
-printArray(15, 4);
+console.log(isNaN('test'));
+
+console.log(printArray(1, 5));
+console.log(printArray(6, 15));
+console.log(printArray(15, 4));
+console.log(printArray(1, 'test'));
