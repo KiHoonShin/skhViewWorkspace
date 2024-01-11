@@ -14,3 +14,53 @@ let callAge = function (age) {
 }
 callAge(10);
 
+function addNumber(x, y = 10) {
+
+  console.log(arguments); // 인자값들을 배열처럼 넣어주는 애 => 배열은 아님
+  console.log((arguments instanceof Array)); // 배열이니 ? -> false
+
+  console.log(arguments.length);
+  console.log(arguments[0]);
+  console.log('test = ' + arguments[0]);
+  arguments[0] = 100;
+  console.log('test2 = ' + arguments[0]);
+  // let x = x;
+  // let y = 10;
+  return x + y;
+}
+
+console.log('--------------')
+console.log(addNumber(10, 20));
+console.log(addNumber(1));
+console.log(addNumber(1, 2, 3, 4, 5)); // 매개변수가 2개이므로  1 , 2 만 받아오고 뒤는 무시
+
+// console.log(this); // window(최상위 객체) 자바스크립트 엔진 , node.js 최상위 객체(global)
+
+// 화살표 함수는 function() 키워드가 생략 -> 생성자함수로 사용을 못한다 : 가볍다
+// 화살표 함수도 무명함수
+
+let minus = (a, b) => {
+  //console.log(arguments) -> 생성자 함수에서만 있다
+  return a - b
+};
+let multifly = (a, b) => a - b;
+
+
+// 자바스크립트에서 함수는 값으로 사용할 수 있다.
+let addAll = x => y => z => `x:${x} y:${y} z:${z}`;
+console.log(addAll(1)(2)(3));
+
+let addTest = function (x) {
+  return function (y) {
+    return function (z) {
+      return `x:${x} y:${y} z:${z}`;
+    }
+  }
+}
+
+console.log(minus instanceof Object);
+
+// 즉시 실행 함수
+(function (x, y) {
+  console.log(x + y);
+})(10, 20);
