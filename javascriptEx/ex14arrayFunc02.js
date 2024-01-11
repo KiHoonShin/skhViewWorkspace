@@ -52,3 +52,14 @@ console.log(result)
 // p = 0 ,  n = 3 , return 3+0 => p = 3
 // p = 3 , n = 5 , return 3+5 => p = 8
 // p = 8 , n = 8 , return 8+8 => p = 16 ........ => 91
+
+// 짝수의 개수를 리턴 ( 누적값, 배열요소값 )
+result = array.reduce((cnt, val) => {
+  if (val % 2 != 0) {
+    return cnt;
+  } else {
+    return cnt += 1;
+  }
+}, 0)
+
+console.log(result);
