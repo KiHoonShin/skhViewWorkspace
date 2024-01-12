@@ -21,26 +21,26 @@ let pets = [cat, dog, rabbit, hamster, cat];
 
 // 1. 동물의 kind가 개 인것을 찾아라
 let res = pets.find((obj) => obj.kind === '개');
-console.log('1번 : ',res);
+console.log('1번 : ', res);
 console.log('------------------')
 // 2. 동물의 kind가 고양이가 아닌것만 빼서 배열로 만들어라
-let q2 = pets.filter((obj) => obj.kind != "고양이");
-console.log('2번 : ',q2);
+let q2 = pets.filter((obj) => obj.kind !== "고양이");
+console.log('2번 : ', q2);
 
 console.log('------------------')
 // 3. 총 동물의 평균 나이를 구해라
-let q3 = pets.reduce((p , n)=> {
-return p + n.age ;
-},0);
-console.log('3번 : ' , q3 / pets.length);
+let q3 = pets.reduce((p, n) => {
+  return p + n.age;
+}, 0);
+console.log('3번 : ', q3 / pets.length);
 
 console.log('------------------')
 
-// 4. 동물 나이순으로 내림차순 정렬
+// 4. 동물 나이순으로 내림차순 정렬 : 기존 배열 건드리지 않기
 
 console.log('4번')
 let copy = [...pets];
-copy.sort((a,b)=> a.age > b.age ? -1 : 1);
+copy.sort((a, b) => a.age > b.age ? -1 : 1);
 console.log(copy);
 
 
