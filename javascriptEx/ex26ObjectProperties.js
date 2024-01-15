@@ -23,7 +23,7 @@ console.log(dog);
 delete dog.name;
 console.log(dog);
 
-//seal : 밀봉 :봉인하다 : 프로퍼티 추가 삭제 금지 
+//seal : 밀봉 :봉인하다 : 프로퍼티 추가 삭제 금지 , 값 변경 수정은 가능
 const cat = {
   name: '복다주',
   year: 2013,
