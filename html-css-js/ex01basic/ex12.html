@@ -14,41 +14,58 @@
       <button class="descending">내림차순</button>
     </div>
     <ul class="user_list">
-      <li>2 : 곰</li>
-      <li>4 : 사자</li>
-      <li>10 : 여우</li>
-      <li>29 : 기린</li>
-      <li>101 : 호랑이</li>
+
     </ul>
   </main>
 </body>
 
 </html>
 <script>
-    const up = document.querySelector('.ascending');
-    const down = document.querySelector('.descending');
   // 데이터
   const userDataList = [
+    { id: 29, name: '기린' },
     { id: 2, name: '곰' },
     { id: 10, name: '여우' },
     { id: 4, name: '사자' },
-    { id: 29, name: '기린' },
     { id: 101, name: '호랑이' }
   ];
 
-  for(var i = 0; i < userDataList.length; i+=1){
-    let list = document.querySelector
+  const btns = document.querySelectorAll('button');
+
+  function updateList() {
+    const ul = document.querySelector("ul");
+    ul.innerHTML = '';
+    let data = '';
+    for (const obj of userDataList) {
+      data += `<li> ${obj.id} : ${obj.name} </li>`
+    }
+    ul.innerHTML = data;
+  }
+  updateList();
+
+
+  // sortByAsecnding();
+  // sortByDescending();
+  // 오름차순
+  function sortByAsecnding() {
+    userDataList.sort((a, b) => {
+      return a.id - b.id;
+    });
+    updateList();
+    alert('오름차순 정렬 완료');
+  }
+  //내림차순
+  function sortByDescending() {
+    userDataList.sort((a, b) => {
+      return b.id - a.id;
+    });
+    updateList();
+    alert('내림차순 정렬 완료');
   }
 
-  up.addEventListener('click', ()=>{
-    userDataList.sort((a,b) => a.id > b.id ? 1 : -1);
-    console.log(userDataList);
-  })
+  btns[0].addEventListener("click", sortByAsecnding);
+  btns[1].addEventListener("click", sortByDescending);
 
-  down.addEventListener('click' , ()=>{
-    userDataList.sort((a,b) => a.id > b.id ? -1 : 1);
-    console.log(userDataList);
-  })
 
-  // userDataList.sort((a,b) => a.id > b.id ? 1 : -1);
+
 </script>
