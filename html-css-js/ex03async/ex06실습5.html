@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .on {
+      background-color: #64b5f6;
+    }
+
+    .fix {
+      background-color: rgb(226, 50, 50);
+      color: #fff;
+    }
+
+    .item {
+      transition: all 0.3s;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+
+    .item:hover {
+      background-color: #2d95eb;
+      color: #fff;
+    }
+
+    .btn {
+      border: 1px solid #2d95eb;
+      background-color: #2c8bda;
+      color: #fff;
+      border-radius: 3px;
+    }
+
+    #content {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+
+    }
+
+    #box>ul {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 8px 12px;
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-rows: 50px;
+      grid-gap: 10px;
+    }
+
+    #box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+    }
+
+    .input-group {
+      display: flex;
+    }
+
+    .input-group>input {
+      border: 1px solid #2d95eb;
+      outline: none;
+      border-right: none;
+      border-radius: 5px 0 0 5px;
+    }
+
+    .input-group>button {
+      border: 1px solid #2d95eb;
+      background-color: #fff;
+      outline: none;
+      border-radius: 0 5px 5px 0;
+      transition: all 0.5s;
+    }
+
+    .input-group>button:hover {
+      background-color: #2d95eb;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="content">
+
+    <div class="input-group">
+      <input type="text" id="username">
+      <button id="btnAdd">Add</button>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn" id="btnStart">시작</button>
+      <button class="btn" id="btnStop">정지</button>
+    </div>
+  </div>
+
+  <div id="box">
+    <ul id="userList">
+      <!-- <li class="item"> 박연미1</li>
+      <li class="item on"> 박연미2</li>
+      <li class="item fix"> 박연미3</li> -->
+    </ul>
+    <ul id="selectedList">
+
+    </ul>
+  </div>
+</body>
+
+</html>
+<script>
+  const input = document.querySelector('#username');
+  const add = document.querySelector('#btnAdd');
+  const start = document.querySelector('#btnStart');
+  const stop = document.querySelector('#btnStop');
+  const userList = document.querySelector('#userList');
+  let nameList = ["김영우", "김준영", "김진수", "김태하", "박윤재", "서원우", "손지영", "신기훈", "신현기",
+    "원우연", "유민석", "윤경재", "이상준", "이준영", "조웅재", "최승현"];
+
+  // 배열로 가져오는 것이 아니라 유사배열로 가져온다 
+  let list = document.querySelectorAll('.item'); // <li class="item"> nameList[i] </li> 객체 리스트
+  // list => nodeList 유사배열 => 배열로 바꾸는 두가지방법
+  // [...document.querySelectorAll('.item')];
+  // Array.from(document.querySelectorAll('.item'));
+  let before = list[0];
+  let idx = 0; // 시작값 
+
+  // [1] nameList =>  userList에 class="item" 다 추가하기 
+  // [2] 추가한 list 객체 => <li class="item"> nameList[i] </li>
+function plusName(){
+  for(let i = 0; i < nameList.length; i+=1){
+    let li = document.createElement("li");
+    li.classList.add("item");
+    li.innerHTML = nameList[i];
+    userList.appendChild(li);
+    idx += 1;
+  }
+};
+plusName();
+
+add.addEventListener('click', ()=>{
+  // console.log(input.value);
+  for(let i = 0; i < nameList.length; i+=1){
+    if(input.value == nameList[i]){
+      alert('이미 있는 이름입니다.');
+      return;
+    }
+    if(!input.value.trim()){
+      alert('값을 입력해주세요.');
+      return;
+    }
+  }
+  let li = document.createElement("li");
+  li.classList.add("item");
+  li.innerHTML = input.value;
+  userList.appendChild(li);
+  nameList.push(input.value);
+  idx +=1;
+});
+list = [...document.querySelectorAll('.item')];
+start.addEventListener('click', ()=>{
+  for(let i = 0; i < nameList.length; i+=1){
+    setInterval(() => {
+      list[i].classList.add('on');
+      list[i].classList.remove('on');
+    }, 50);
+  }
+});
+
+
+
+
+</script>
