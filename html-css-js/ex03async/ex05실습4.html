@@ -81,31 +81,34 @@
   let $stopBtn = document.querySelector(".stopBtn");
   let $grid = document.querySelector(".grid");
   let cnt = 0;
+  let interval = null;
 
-  function addBoxs() {
-    if (cnt >= data.length) return;
-    for (let idx = 0; idx < data.length; idx++) {
-      setTimeout(() => {
-        let box = document.createElement("div"); // <div></div>
-        box.classList.add("box");
-        box.innerHTML = data[idx];
-        $grid.appendChild(box);
-        cnt += 1;
-      }, idx * 300);
-    }
+  let run = () => {
+    clearInterval(interval);
+    interval = setInterval(()=>{
+      addBox();
+    } , 300);
   }
-  let isClick = false;
 
-  $addBtn.addEventListener('click', () => {
-    if (!isClick) {
-      addBoxs();
+  function addBox(){
+    if(cnt >= data.length){
+      clearInterval(interval);
+      return;
     }
-    isClick = true;
+    let box = document.createElement("div");
+    box.classList.add('box');
+    box.innerHTML = data[cnt];
+    $grid.appendChild(box);
+    cnt += 1;
+  }
+
+
+
+  $addBtn.addEventListener('click', run);
+  $stopBtn.addEventListener('click', ()=>{
+    clearInterval(interval);
   });
 
-  $stopBtn.addEventListener('click', ()=>{
-    
-  });
 
 
 </script>
