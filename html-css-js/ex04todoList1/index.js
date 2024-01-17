@@ -53,10 +53,11 @@ function deleteItem(id) {
 
 items.addEventListener('click', (event) => {
   let id = event.target.getAttribute('data-id');
+  console.log(id);
   if (!id) {
-    // path / svg 선택했을때 path로 잡히면 그것에 부모인 svg(data-id) 선택
+    // path / svg 선택했을때 path로 잡히면 그것의 부모인 svg(data-id) 선택
     id = event.target.parentElement.getAttribute('data-id');
-    // 아이템을 선택했을시는 삭제 안되게 막아줌 
+    // 아이템을 선택했을시는 삭제 안 되게 막아줌 
     if (event.target.parentElement.classList.value === 'item_row') return;
     // console.log(id);
     // console.log("test1=", event.target);
