@@ -57,7 +57,7 @@
     })
   })
 
-  list.addEventListener('dragover', e => {
+  zone2.addEventListener('dragover', e => {
     // 드래그오버를 할 수 있도록 기본 이벤트 막기
     e.preventDefault();
     e.dataTransfer.setData('num', e.target.innerText);
@@ -70,6 +70,6 @@
     //   console.log(boxs);
     // }
     zone2.appendChild(boxs.find(box => box.innerText == num));
-    zone2.innerHTML = "";
+    // zone2.innerHTML = "";
   });
 </script>
