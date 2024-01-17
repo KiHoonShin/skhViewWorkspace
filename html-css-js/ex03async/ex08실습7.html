@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 50px;
+      height: 50px;
+      background-color: royalblue;
+      margin: 5px 0;
+      position: relative;
+    }
+    .testBox{
+      width: 50px;
+      height: 50px;
+      background-color: pink;
+    }
+    /* .box:nth-child(1) {
+      left: 10px;
+    } */
+  </style>
+</head>
+
+<body>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="testBox"></div>
+</body>
+
+</html>
+<script>
+  const boxs = [...document.querySelectorAll(".box")];
+  function move(element, endPoint) {
+    let left = element.style.left;
+
+    function draw() {
+      left++;
+      element.style.left = left + 'px';
+      if (left == endPoint) {
+        clearInterval(timer);
+      }
+    }
+    let timer = setInterval(draw, 1);
+  }
+  boxs.forEach(box => {
+    box.addEventListener('click', () => {
+      move(box, 500);
+    })
+  })
+
+  const testBox = document.querySelector(".testBox");
+  testBox.addEventListener('click', ()=>{
+    testBox.style.position = 'absolute';
+    testBox.animate({
+      top : ['0px' , '500px']
+    } , {
+      duration : 500,
+      easing : 'ease-in',
+      iterations : 1, // infinity or a number
+    })
+  })
+
+</script>
