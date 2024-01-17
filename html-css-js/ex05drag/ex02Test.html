@@ -69,6 +69,8 @@
   const container = document.querySelector('.container');
   const input = document.querySelector('input');
   const boxs = [...document.querySelectorAll('.box')];
+  const trash = document.querySelector(".trash");
+
   let number = 1;
 
   container.addEventListener('click', e => {
@@ -93,5 +95,32 @@
     let getBox = boxs.find(box => box.classList.contains('on'));
     getBox && getBox.classList.remove('on');
     if (getBox) getBox.innerHTML = "";
+  })
+
+  boxs.forEach((box) => {
+    box.setAttribute('draggable', "true");
+    box.addEventListener('dragstart', e => {
+      e.dataTransfer.setData("num", e.target.innerText);
+      box.classList.add('active');
+    })
+    box.addEventListener('dragend', e => {
+      box.classList.remove('active');
+    })
+  });
+
+  trash.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.setData("num", e.target.innerText);
+  })
+
+  trash.addEventListener('drop', e => {
+    e.preventDefault();
+    let num = e.dataTransfer.getData('num');
+    console.log(num);
+    if (num == "") {
+      return;
+    }
+    trash.appendChild(boxs.find(box => box.innerText == num));
+    trash.innerHTML = "";
   })
 </script>

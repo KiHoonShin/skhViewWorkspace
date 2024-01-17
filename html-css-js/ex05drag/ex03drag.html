@@ -49,7 +49,7 @@
 <script>
   const list = document.querySelector(".list");
   const boxs = [...document.querySelectorAll(".box")];
-
+  const zone2 = document.querySelector(".zone2");
   boxs.forEach((box) => {
     box.setAttribute("draggable", "true");
     box.addEventListener('dragstart', e => {
@@ -62,9 +62,14 @@
     e.preventDefault();
     e.dataTransfer.setData('num', e.target.innerText);
   });
-  list.addEventListener('drop', e => {
+  zone2.addEventListener('drop', e => {
     e.preventDefault();
     let num = e.dataTransfer.getData('num');
     console.log(num);
+    // if (boxs.find(box => box.innerHTML == num)) {
+    //   console.log(boxs);
+    // }
+    zone2.appendChild(boxs.find(box => box.innerText == num));
+    zone2.innerHTML = "";
   });
 </script>
