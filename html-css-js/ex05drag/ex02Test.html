@@ -80,11 +80,6 @@
     }
   })
 
-  function red() {
-    let val = String(input.value);
-    console.log(val);
-  }
-
   input.addEventListener('keyup', () => {
     let value = input.value;
     if (value.trim() === '') return;
@@ -110,7 +105,7 @@
 
   trash.addEventListener('dragover', e => {
     e.preventDefault();
-    e.dataTransfer.setData("num", e.target.innerText);
+    // e.dataTransfer.setData("num", e.target.innerText);
   })
 
   trash.addEventListener('drop', e => {
