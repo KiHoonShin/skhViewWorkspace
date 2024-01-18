@@ -1,119 +1,136 @@
-const container = document.querySelector(".container");
-const start = document.querySelector("#start");
-const boxs = [...document.querySelectorAll(".box")];
-const restart = document.querySelector(".restart");
-const timer = document.querySelector(".timer");
-
-let setIdx = 0;
-boxs.forEach(box =>{
-  box.setAttribute("data-idx" , setIdx++);
-})
-
-let front = [];
-let back = [];
-
-function init(){
-  for(let i = 1; i <= 25; i+=1){
-    front.push(i);
-    back.push(i+25);
+class Game1To50 {
+  constructor() {
+    this.nodeList = [];
+    this.frontList = [];
+    this.backList = [];
+    this.gameNum = 1;
+    this.record = { min: 0, sec: 0, milSec: 0, cnt: 0 };
+    this.gameTime = 0;
+    this.gameBtn = document.querySelector("#start");
+    this.timer = document.querySelector(".timer");
+    this.container = document.querySelector(".container");
+    this.gameBtn.addEventListener('click', () => {
+      this.init();
+      this.gameStart();
+    })
   }
-}
-// init();
 
-function shuffle(){
-  for(let i = 0; i < 500; i+=1){
-    let r = Math.floor(Math.random()*24);
-    let temp = front[0];
-    front[0] = front[r];
-    front[r] = temp;
+  init() {
+    this.record = { min: 0, sec: 0, milSec: 0, cnt: 0 };
+    this.gameBtn.style.display = 'none';
+    this.timer.style.opacity = 1;
+    // 다시시작할때 recode 제거하기 위해서 붙여줌 
+    let recode = document.querySelector('.recode');
+    recode && this.timer.classList.remove('recode');
+  };
+  gameStart() {
 
-    let temp2 = back[0];
-    back[0] = back[r];
-    back[r] = temp2;
-  }
-}
-// shuffle();
+    this.gameTime = setInterval(this.setRecord, 10);
 
-let gameNum = 1;
-// 게임시작 누르면 front 생성
-start.addEventListener('click', ()=>{
-  timer.style.visibility = "inherit";
-  const interval = setInterval(changeTime, 10);
-  start.style.display = "none";
-  init();
-  shuffle();
-  // front.forEach((num) =>{
-  //   container.innerHTML += `
-  //     <div class="box">${num}</div>
-  //   `;
-  // })
-  let frontIdx = 0;
-  boxs.forEach((box)=>{
-    box.innerHTML = front[frontIdx++];
-  })
-  container.style.visibility = "inherit";
-})
+    this.setNum();
+    let idx = 0;
 
-let backIdx = 0;
-boxs.forEach((box)=>{
-  box.addEventListener('click', e=>{
-    console.log(e.target);
-    if(e.target.innerHTML == gameNum){
-      e.target.innerHTML = back[backIdx++];
-      if(gameNum >= 26){
-        e.target.classList.add("hide");
-      }
-      gameNum++;
-      if(gameNum == 5){
-        container.style.visibility = "hidden";
-        restart.style.visibility = "inherit";
-        clearInterval(interval);
-        return;
-      }
-    } else{
-      let r = Math.floor(Math.random()*25);
-      // boxs[r].style.backgroundColor = "beige";
-      console.log(boxs.find(box => box.innerHTML == gameNum));
-      boxs.find(box => box.innerHTML == gameNum).classList.add("hint");
-      setTimeout(() => {
-        boxs.find(box => box.innerHTML == gameNum).classList.remove("hint");
-      }, 20);
+    this.frontList.forEach((node) => {
+      this.nodeList.push(this.createBox(node, idx));
+      idx++;
+    });
+    // console.log(this.nodeList);
+
+    this.nodeList.forEach((div) => {
+      div.addEventListener('click', (event) => {
+        this.hintNum();
+        //console.log(event.target.innerHTML);
+        this.checkNum(event.target);
+      });
+    });
+
+  };
+  setRecord = () => {
+    let cnt = this.record.cnt++;
+    let min = parseInt(cnt / 3600);
+    let sec = parseInt(cnt % 3600 / 60);
+    let milSec = (cnt % 3600) % 60;
+
+    min = min < 10 ? '0' + min : min;
+    sec = sec < 10 ? '0' + sec : sec;
+    milSec = milSec < 10 ? '0' + milSec : milSec;
+
+    this.timer.innerHTML = `${min}:${sec}:${milSec}`;
+    this.record.min = min;
+    this.record.sec = sec;
+    this.record.milSec = milSec;
+  };
+  setNum() {
+    for (let i = 0; i < 25; i++) {
+      this.frontList.push(i + 1);
+      this.backList.push(i + 26);
     }
-  })
-})
+    // console.log(this.frontList);
+    // console.log(this.backList);
 
-// if(gameNum == 51){
-//   container.style.visibility = "hidden";
-//   restart.style.display = "block";
-// }
+    for (let i = 0; i < 100; i++) {
+      let r = Math.floor(Math.random() * 25);
+      let temp = this.frontList[0];
+      this.frontList[0] = this.frontList[r];
+      this.frontList[r] = temp;
 
-restart.addEventListener('click', ()=>{
-  gameNum = 1;
-  backIdx = 0;
-  init();
-  shuffle();
-  let frontIdx = 0;
-  boxs.forEach((box)=>{
-    box.innerHTML = front[frontIdx++];
-  })
-  container.style.visibility = "inherit";
-})
+      r = Math.floor(Math.random() * 25);
+      temp = this.backList[0];
+      this.backList[0] = this.backList[r];
+      this.backList[r] = temp;
+    }
+  };
+  createBox(num, idx) {
+    const div = document.createElement('div');
+    if (num < 10) {
+      div.innerHTML = '0' + num;
+    } else {
+      div.innerHTML = num;
+    }
+    div.classList.add('box');
+    div.setAttribute('data-idx', idx);
 
-const startTime = new Date().getTime();
-let changeTime = () => {
-  const now = new Date().getTime();
-  const remain = now - startTime;
-  const remainSec = (remain / 1000).toFixed(0);
-  let minute = 0;
-  let sec = 0;
-  let milsec = remainSec;
-  if(milsec == 60){
-    minute += 1;
-    milsec = 0;
+    this.container.appendChild(div);
+    return div;
   }
-  let label = `0${minute}:${milsec}`;
 
-  timer.innerHTML = label;
+  hintNum() {
+    const getDiv = this.nodeList.find(
+      (div) => this.gameNum == div.innerHTML * 1
+    );
+    if (!getDiv) return;
+
+    getDiv.classList.add('hint');
+    setTimeout(() => {
+      getDiv.classList.remove('hint');
+    }, 200);
+  }
+
+  checkNum(node) {
+    if (node.innerHTML * 1 === this.gameNum) {
+      if (this.gameNum <= 25) {
+        node.innerHTML = this.backList[node.getAttribute('data-idx')];
+      } else {
+        node.style.opacity = 0;
+      }
+      this.gameNum++;
+    }
+    if (this.gameNum > 50) {
+      setTimeout(this.reset, 300);
+    }
+  };
+  reset = () => {
+
+    clearInterval(this.gameTime);
+    this.container.innerHTML = '';
+    this.frontList = [];
+    this.backList = [];
+    this.gameBtn.style.display = ' block';
+    this.gameBtn.innerHTML = '다시 시작';
+    this.timer.classList.add('recode');
+    this.timer.innerHTML = ` 당신의 기록 <br>${this.record.min}:${this.record.sec}:${this.record.milSec}`;
+
+  };
 }
 
-// const interval = setInterval(changeTime, 10);
+const game = new Game1To50();
