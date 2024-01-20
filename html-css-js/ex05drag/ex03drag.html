@@ -60,7 +60,7 @@
   zone2.addEventListener('dragover', e => {
     // 드래그오버를 할 수 있도록 기본 이벤트 막기
     e.preventDefault();
-    e.dataTransfer.setData('num', e.target.innerText);
+    // e.dataTransfer.setData('num', e.target.innerText);
   });
   zone2.addEventListener('drop', e => {
     e.preventDefault();

@@ -48,6 +48,7 @@ input.addEventListener('keydown', (event) => {
 
 function deleteItem(id) {
   const delItem = document.querySelector(`.item_row[data-id='${id}']`);
+  console.log(delItem);
   delItem.remove();
 }
 

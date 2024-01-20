@@ -84,6 +84,7 @@
     let value = input.value;
     if (value.trim() === '') return;
     let getBox = boxs.find(box => box.innerText == value);
+    console.log(getBox);
     getBox && getBox.classList.add('on');
   })
   input.addEventListener('keydown', () => {
@@ -110,6 +111,7 @@
 
   trash.addEventListener('drop', e => {
     e.preventDefault();
+    // console.log(e);
     let num = e.dataTransfer.getData('num');
     console.log(num);
     if (num == "") {
