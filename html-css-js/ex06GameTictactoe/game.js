@@ -47,7 +47,7 @@ class TicTacToe {
     td.classList.add(this.curPlayer.color);
     this.winCheck(this.curPlayer.shape);
     this.cnt += 1;
-
+    // console.log(this.curPlayer.shape);
     if (!this.winner && this.cnt === 9) {
       return this.finish();
     }
@@ -129,6 +129,7 @@ class TicTacToe {
     this.sBtn.innerHTML = '게임 다시시작';
     this.container.appendChild(this.off);
     this.container.appendChild(this.sBtn);
+    this.turnFinsh = false;  // 내가 추가함. 이걸 추가해야 다시시작 눌러도 게임이 재시작 됨.
   }
 }
 class Player {

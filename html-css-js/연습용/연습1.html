@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {}
+
+    .row {
+      display: flex;
+      /* border: 1px solid red; */
+    }
+
+    img {
+      width: 300px;
+    }
+
+    .col-sm-4 {
+      padding: 20px;
+      border: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="row">
+
+  </div>
+</body>
+
+</html>
+
+<script>
+  var products = [{
+      id: 0,
+      price: 70000,
+      title: 'Blossom Dress'
+    },
+    {
+      id: 1,
+      price: 50000,
+      title: 'Springfield Shirt'
+    },
+    {
+      id: 2,
+      price: 60000,
+      title: 'Black Monastery'
+    },
+  ];
+
+  products.forEach((a, i) => {
+    var 템플릿 = `
+        <div class ="col-sm-4">
+          <img src = "https://via.placeholder.com/600" class="w-100">
+          <h5>${products[i].title}</h5>
+          <p>가격 : ${products[i].price}</p>
+          <button class="buy"> 구매 </button>  
+        </div>`;
+    document.querySelector(".row").innerHTML += 템플릿;
+  });
+
+  // const btns = [...document.querySelectorAll(".buy")];
+  const btn = document.querySelector(".buy");
+  let cnt = 0;
+  let idx = 0;
+  btn.addEventListener('click', (e) => {
+    let item = products[idx].title;
+    if (cnt > 0) {
+      let 꺼냄 = JSON.parse(localStorage.getItem("cart"));
+      꺼냄.push(item);
+      localStorage.setItem("cart", JSON.stringify(꺼냄));
+    } else {
+      localStorage.setItem("cart", JSON.stringify([item]));
+    }
+    cnt += 1;
+    idx += 1;
+  })
+
+
+
+
+
+
+
+
+  // products.sort((a, b) => {
+  //   if (a.title > b.title) {
+  //     return -1;
+  //   } else {
+  //     return 1;
+  //   }
+  // })
+  // // products.forEach((product)=>{
+
+  // // })
+
+  // let newArr = products.filter(product =>
+  //   product.price == 60000
+  // )
+  // console.log(newArr);
+</script>

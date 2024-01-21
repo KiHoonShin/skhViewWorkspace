@@ -118,7 +118,7 @@ class Game1To50 {
     if (this.gameNum > 50) {
       setTimeout(this.reset, 300);
     }
-  };
+  };ㅏ
   reset = () => {
 
     clearInterval(this.gameTime);
