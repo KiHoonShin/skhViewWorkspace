@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" width="800" height="400"></canvas>
+</body>
+
+</html>
+<script>
+  let canvas = document.querySelector("#canvas");
+  let ctx = canvas.getContext("2d");
+
+  // 원 그리기
+  ctx.beginPath();
+  //                     0 과 2*Math.PI는 거의 건드리지 않는 기본 값     
+  ctx.arc(100, 75, 40, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  // 사각형 그리기
+  ctx.beginPath();
+  ctx.rect(10, 300, 50, 50);
+  ctx.fillStyle = "red";
+  ctx.fill();
+</script>

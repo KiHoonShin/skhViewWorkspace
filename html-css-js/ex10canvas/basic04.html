@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" width="800" height="400"></canvas>
+</body>
+
+</html>
+
+<script>
+  const canvas = document.querySelector("#canvas");
+  const ctx = canvas.getContext("2d");
+
+  let radius = 10;
+  let num = radius;
+  ctx.beginPath();
+  ctx.arc(num, 200, 10, 0, 2 * Math.PI);
+  ctx.fillStyle = "green";
+  ctx.fill(); // 채우는 거라서 채우는 fill로 끝나야 함.
+
+
+  move = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // 움직이는것처럼 보여짐
+    ctx.beginPath();
+    ctx.arc(num, 200, radius, 0, 2 * Math.PI);
+    ctx.fillStyle = "green";
+    ctx.fill(); // 채우는 거라서 채우는 fill로 끝나야 함.
+    num += 1;
+    if (num == canvas.width - radius) {
+      clearInterval(interval);
+    }
+  };
+
+  // 멈췄다가 재시작하는법. 익혀두기 !!!
+
+  let interval = setInterval(move, 10);
+
+  let isMove = true;
+  canvas.addEventListener("click", () => {
+    if (isMove) {
+      isMove = false;
+      clearInterval(interval);
+    } else {
+      interval = setInterval(move, 10);
+      isMove = true;
+    }
+  })
+</script>
