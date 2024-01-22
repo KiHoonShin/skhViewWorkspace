@@ -1,16 +1,25 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 let key = { "ArrowRight": false, "ArrowLeft": false, "ArrowUp": false, "ArrowDown": false };
-let player = { "x": 375, "y": 600 - 50, "size": 50, "speed": 2, "color": "blue" };
+let player = { "x": 375, "y": 600 - 50, "size": 40, "speed": 2, "color": "blue", "img": null };
 let enemyList = [];
 let spotList = [];
 let timer = 0;
 let isOver = false;
+let playerImg = null;
+let poopImg = null;
 
 function init() {
   document.addEventListener("keydown", e => keyHandler(e, true));
   document.addEventListener("keyup", e => keyHandler(e, false));
   setSpotList(8);
+  playerImg = new Image();
+  playerImg.src = './img/player.png'
+  poopImg = new Image();
+  poopImg.src = './img/poop.png'
+
+  player.img = playerImg;
+
 }
 
 function keyHandler(e, value) {
@@ -38,16 +47,17 @@ function movePlayer() {
 }
 
 function drawObj(obj) {
-  ctx.beginPath();
-  ctx.rect(obj.x, obj.y, obj.size, obj.size);
-  ctx.fillStyle = obj.color;
-  ctx.fill();
-  ctx.closePath();
+  // ctx.beginPath();
+  // ctx.rect(obj.x, obj.y, obj.size, obj.size);
+  // ctx.fillStyle = obj.color;
+  // ctx.fill();
+  // ctx.closePath();
+  ctx.drawImage(obj.img, obj.x, obj.y, obj.size, obj.size);
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  spotList.forEach(spot => drawObj(spot));
+  //spotList.forEach(spot => drawObj(spot));
   drawObj(player);
   createEnemyList();
   enemyList.forEach(emeny => drawObj(emeny));
@@ -68,7 +78,7 @@ function createEnemyList() {
       let rIdx = parseInt(Math.random() * spotList.length);
       let spot = spotList[rIdx];
       let rSpeed = parseInt(Math.random() * 4) + 1; // 1~4px 
-      let enemy = { x: spot.x, y: spot.y, size: 80, speed: rSpeed, color: 'green', 'alive': 1000 }
+      let enemy = { x: spot.x, y: spot.y, size: 40, speed: rSpeed, color: 'green', 'alive': 1000, img: poopImg }
       enemyList.push(enemy);
     }
   }
