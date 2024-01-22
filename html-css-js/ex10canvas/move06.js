@@ -52,6 +52,8 @@ function drawObj(obj) {
   // ctx.fillStyle = obj.color;
   // ctx.fill();
   // ctx.closePath();
+
+  // 캔버스에 이미지 넣는법
   ctx.drawImage(obj.img, obj.x, obj.y, obj.size, obj.size);
 }
 
@@ -60,7 +62,7 @@ function draw() {
   //spotList.forEach(spot => drawObj(spot));
   drawObj(player);
   createEnemyList();
-  enemyList.forEach(emeny => drawObj(emeny));
+  enemyList.forEach(enemy => drawObj(enemy));
 
   if (isOver) clearInterval(interval);
   movePlayer();
@@ -70,7 +72,7 @@ function draw() {
 
 
 }
-// 1초에 랜덤 spot에서 emeny를 3개씩 생성하라 
+// 1초에 랜덤 spot에서 enemy를 3개씩 생성하라 
 function createEnemyList() {
   if (timer % 100 == 0) {
     timer = 0;
@@ -97,7 +99,7 @@ function moveEnemyList() {
 
 function UpdateEnemyList() {
   //alive  <=  0 enemy 배열에서 삭제 
-  enemyList = enemyList.filter(emeny => emeny.alive > 0);
+  enemyList = enemyList.filter(enemy => enemy.alive > 0);
 }
 
 // function inEnemy(px, py, enemy) {
