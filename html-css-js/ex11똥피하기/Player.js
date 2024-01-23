@@ -1,5 +1,5 @@
-export default class Poop {
-// class Player {
+export default class Player {
+  // class Player {
   constructor() {
     this.img = new Image();
     this.img.src = './img/player.png';
