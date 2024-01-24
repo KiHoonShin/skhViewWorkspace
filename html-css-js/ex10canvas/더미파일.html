@@ -16,9 +16,10 @@
     let keyDown = {};
     let objectList = [];
     let stage = 0 ; 
+    let isPotal = false;
 
     const image = new Image();
-    image.src = './'
+    image.src = './쪼렙마리오.png';
 
     addEventListener('keydown', (e) => {
       keyDown[e.keyCode] = true;
@@ -43,17 +44,21 @@
 
         if (keyDown[37]) {
           this.x -= this.speed;
+          isPotal = false; 
         }
         if (keyDown[39]) {
           this.x += this.speed;
+          isPotal = false; 
+
         }
         if (keyDown[38]) {
           this.y -= this.speed;
+          isPotal = false; 
         }
-        if (keyDown[40]) {
+        if (keyDown[40]) { // 아래로 이동
           this.y += this.speed;
+          isPotal = true;
         }
-
         let maxX = canvas.width - this.size;
         let maxY = canvas.height - this.size;
         if (this.x <= 0) this.x = 0;
@@ -63,18 +68,22 @@
 
 
         let isCrash = false;
+        let goNext = false;
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
             if (obj.name === '포털') {
               console.log("포털탐");
+              if(isPotal){
+              // stage += 1;
+              // console.log("stage = " + stage);
+              // if(stage === 1){
+              //   openNewStage();
+              // } else if(stage === 2){
+              //   openNewStage2();
+              // }
+              goNext = true;
               stage += 1;
-              console.log("stage = " +stage);
-              if(stage === 1){
-                openNewStage();
-              } else if(stage === 2){
-                openNewStage2();
-              }
-
+            }
             } if (obj.name === "바다" || obj.name === "풀숲") {
               isCrash = true;
             }
@@ -85,7 +94,10 @@
           this.x = px;
           this.y = py;
         }
-
+        if(goNext){
+          if(stage === 1) openNewStage();
+          else if(stage === 2) openNewStage2();
+        }
       }
 
 
@@ -100,22 +112,31 @@
       collision(obj) {
 
 
-        if (this.inRect(obj, this.x, this.y)) return true;
+        if (this.inRect(obj, this.x, this.y)) {
+          return true;
+        }
         // player의 오른쪽 상단 모서리가 닿으면
-        else if (this.inRect(obj, this.x + this.size, this.y)) return true;
+        else if (this.inRect(obj, this.x + this.size, this.y)){
+          return true;
+        }
         // player의 왼쪽 하단 모서리가 닿으면
-        else if (this.inRect(obj, this.x, this.y + this.size)) return true;
+        else if (this.inRect(obj, this.x, this.y + this.size)) {
+          // isPotal = true;
+          return true;
+        }
         // player의 오른쪽 하단 모서리가 닿으면
-        else if (this.inRect(obj, this.x + this.size, this.y + this.size)) return true;
+        else if (this.inRect(obj, this.x + this.size, this.y + this.size)){
+          return true;
+        }
         else return false;
-
       }
 
       render(ctx) {
         this.movePlayer();
         ctx.beginPath();
         ctx.fillStyle = this.color;
-        ctx.rect(this.x, this.y, this.size, this.size);
+        ctx.drawImage(image, this.x, this.y, this.size, this.size);
+        // ctx.rect(this.x, this.y, this.size, this.size);
         ctx.fill();
       }
     }
@@ -164,7 +185,7 @@
       player.y = 0;
       objectList = [];
       objectList.push(new Object('풀숲', canvas.width / 2, canvas.height / 2, 400, 200, 'green'));
-      objectList.push(new Object('포털', canvas.width - 50, 0, 50, 50, 'pink'));
+      objectList.push(new Object('포털', canvas.width - 50, 100, 50, 50, 'pink'));
       console.log(objectList);
     }
 
