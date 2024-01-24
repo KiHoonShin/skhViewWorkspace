@@ -29,6 +29,7 @@
   ctx.fillStyle = "green";
   ctx.fill(); // 채우는 거라서 채우는 fill로 끝나야 함.
 
+  let back = true;
 
   move = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // 움직이는것처럼 보여짐
@@ -36,9 +37,18 @@
     ctx.arc(num, 200, radius, 0, 2 * Math.PI);
     ctx.fillStyle = "green";
     ctx.fill(); // 채우는 거라서 채우는 fill로 끝나야 함.
-    num += 1;
+    // num += 1;
+    if(back){
+      num += 1;
+    } else{
+      num -=1;
+    }
     if (num == canvas.width - radius) {
-      clearInterval(interval);
+      // clearInterval(interval);
+      back = false;
+    }
+    if(num == 0+radius){
+      back = true;
     }
   };
 
