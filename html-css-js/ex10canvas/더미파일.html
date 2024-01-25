@@ -9,17 +9,32 @@
 </head>
 
 <body>
-  <canvas id="test" width="800" height="600" style="background-color: lightgreen;"></canvas>
+  <canvas id="test" width="1200" height="600"></canvas>
   <script>
     const canvas = document.querySelector('#test');
     const ctx = canvas.getContext('2d');
     let keyDown = {};
     let objectList = [];
-    let stage = 0 ; 
-    let isPotal = false;
+    let stage = 0;
+    // let isPotal = false;
 
     const image = new Image();
     image.src = './쪼렙마리오.png';
+
+    const 벽돌 = new Image();
+    벽돌.src = './벽돌.png';
+
+    const 파이프 = new Image();
+    파이프.src = './파이프.png';
+
+    const 아이템벽돌 = new Image();
+    아이템벽돌.src = './아이템벽돌.png';
+
+    const 배경 = new Image();
+    배경.src = './마리오배경.jpg';
+
+    const 배경2 = new Image();
+    배경2.src = './바다배경.jpg';
 
     addEventListener('keydown', (e) => {
       keyDown[e.keyCode] = true;
@@ -31,9 +46,9 @@
 
     class Player {
       constructor() {
-        this.x = 0;
-        this.y = 0;
         this.size = 50;
+        this.x = 0;
+        this.y = canvas.height - this.size;
         this.speed = 5;
         this.color = 'red';
       }
@@ -41,19 +56,20 @@
       movePlayer() {
         let px = this.x;
         let py = this.y;
+        let isPotal = false;
 
         if (keyDown[37]) {
           this.x -= this.speed;
-          isPotal = false; 
+          // isPotal = false; 
         }
         if (keyDown[39]) {
           this.x += this.speed;
-          isPotal = false; 
+          // isPotal = false; 
 
         }
         if (keyDown[38]) {
           this.y -= this.speed;
-          isPotal = false; 
+          // isPotal = false; 
         }
         if (keyDown[40]) { // 아래로 이동
           this.y += this.speed;
@@ -69,23 +85,29 @@
 
         let isCrash = false;
         let goNext = false;
+        let isItemBlock = false;
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
-            if (obj.name === '포털') {
+            if (obj.name === '파이프') {
               console.log("포털탐");
-              if(isPotal){
-              // stage += 1;
-              // console.log("stage = " + stage);
-              // if(stage === 1){
-              //   openNewStage();
-              // } else if(stage === 2){
-              //   openNewStage2();
-              // }
-              goNext = true;
-              stage += 1;
+              if (isPotal) {
+                // stage += 1;
+                // console.log("stage = " + stage);
+                // if(stage === 1){
+                //   openNewStage();
+                // } else if(stage === 2){
+                //   openNewStage2();
+                // }
+                goNext = true;
+                stage += 1;
+              }
             }
-            } if (obj.name === "바다" || obj.name === "풀숲") {
+            if (obj.name === "벽돌" || obj.name === "풀숲") {
               isCrash = true;
+            }
+            if (obj.name === "아이템벽돌") {
+              isCrash = true;
+              isItemBlock = true;
             }
             return false;
           }
@@ -94,9 +116,14 @@
           this.x = px;
           this.y = py;
         }
-        if(goNext){
-          if(stage === 1) openNewStage();
-          else if(stage === 2) openNewStage2();
+        if (isItemBlock) {
+          setTimeout(() => {
+            objectList = objectList.filter(obj => obj.name !== "아이템벽돌")
+          }, 500);
+        }
+        if (goNext) {
+          if (stage === 1) openNewStage();
+          else if (stage === 2) openNewStage2();
         }
       }
 
@@ -116,7 +143,7 @@
           return true;
         }
         // player의 오른쪽 상단 모서리가 닿으면
-        else if (this.inRect(obj, this.x + this.size, this.y)){
+        else if (this.inRect(obj, this.x + this.size, this.y)) {
           return true;
         }
         // player의 왼쪽 하단 모서리가 닿으면
@@ -125,10 +152,9 @@
           return true;
         }
         // player의 오른쪽 하단 모서리가 닿으면
-        else if (this.inRect(obj, this.x + this.size, this.y + this.size)){
+        else if (this.inRect(obj, this.x + this.size, this.y + this.size)) {
           return true;
-        }
-        else return false;
+        } else return false;
       }
 
       render(ctx) {
@@ -151,19 +177,36 @@
         this.color = color;
       }
 
-      render(ctx) {
+      render(ctx) { // 파이프용
+        ctx.beginPath();
+        // ctx.fillStyle = this.color;
+        // ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(파이프, this.x, this.y, this.width, this.height);
+        ctx.fill();
+      }
+
+      renderBlock(ctx) { // 벽돌용
         ctx.beginPath();
         ctx.fillStyle = this.color;
-        ctx.rect(this.x, this.y, this.width, this.height);
+        // ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(벽돌, this.x, this.y, this.width, this.height);
         ctx.fill();
+      }
+
+      renderItemBlock(ctx) {
+        ctx.drawImage(아이템벽돌, this.x, this.y, this.width, this.height);
       }
     }
 
     let player = new Player();
 
     function add() {
-      objectList.push(new Object('바다', 0, 400, 300, 100, 'aqua'));
-      objectList.push(new Object('포털', canvas.width - 50, 400, 50, 50, 'pink'));
+      objectList.push(new Object('벽돌', 100, 400, 50, 50));
+      objectList.push(new Object('벽돌', 145, 400, 50, 50));
+      objectList.push(new Object('벽돌', 350, 350, 50, 50));
+      objectList.push(new Object('벽돌', 395, 350, 50, 50));
+      objectList.push(new Object('아이템벽돌', 445, 350, 50, 50));
+      objectList.push(new Object('파이프', canvas.width - 100, 400, 100, 200, 'pink'));
       console.log(objectList);
       objectList.forEach((e) => {
         console.log(e.x);
@@ -173,8 +216,19 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (stage == 0) {
+        ctx.drawImage(배경, 0, 0, canvas.width, canvas.height);
+      } else if (stage == 1) {
+        ctx.drawImage(배경2, 0, 0, canvas.width, canvas.height);
+      }
       objectList.forEach((e) => {
-        e.render(ctx)
+        if (e.name == '파이프') {
+          e.render(ctx)
+        } else if (e.name == '벽돌') {
+          e.renderBlock(ctx);
+        } else if (e.name == '아이템벽돌') {
+          e.renderItemBlock(ctx);
+        }
       })
       player.render(ctx);
     }
@@ -182,21 +236,23 @@
 
     function openNewStage() {
       player.x = 0;
-      player.y = 0;
+      player.y = canvas.height - player.size;
       objectList = [];
-      objectList.push(new Object('풀숲', canvas.width / 2, canvas.height / 2, 400, 200, 'green'));
-      objectList.push(new Object('포털', canvas.width - 50, 100, 50, 50, 'pink'));
+      objectList.push(new Object('벽돌', canvas.width / 2, canvas.height / 2, 400, 200, 'green'));
+      objectList.push(new Object('파이프', canvas.width - 100, 400, 100, 150, 'pink'));
       console.log(objectList);
     }
 
     function openNewStage2() {
       player.x = 0;
-      player.y = 0;
+      player.y = canvas.height - player.size;
       objectList = [];
-      objectList.push(new Object('가시밭', 300, canvas.height / 2, 400, 200, 'gray'));
-      objectList.push(new Object('포털', canvas.width - 50, 100, 50, 50, 'pink'));
+      objectList.push(new Object('벽돌', 300, canvas.height / 2, 400, 200, 'gray'));
+      objectList.push(new Object('파이프', canvas.width - 100, 400, 100, 150, 'pink'));
       console.log(objectList);
     }
+
+
     add();
     setInterval(draw, 10);
   </script>
