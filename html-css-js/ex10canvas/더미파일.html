@@ -16,6 +16,8 @@
     let keyDown = {};
     let objectList = [];
     let stage = 0;
+    let 점프timer = 0;
+    let 점프중 = false;
     // let isPotal = false;
 
     const image = new Image();
@@ -27,6 +29,9 @@
     const 파이프 = new Image();
     파이프.src = './파이프.png';
 
+    const 함정파이프 = new Image();
+    함정파이프.src = './함정파이프.png';
+
     const 아이템벽돌 = new Image();
     아이템벽돌.src = './아이템벽돌.png';
 
@@ -35,6 +40,11 @@
 
     const 배경2 = new Image();
     배경2.src = './바다배경.jpg';
+
+    let backX = 0;
+
+    const 아이템버섯 = new Image();
+    아이템버섯.src = './아이템버섯.png';
 
     addEventListener('keydown', (e) => {
       keyDown[e.keyCode] = true;
@@ -75,6 +85,24 @@
           this.y += this.speed;
           isPotal = true;
         }
+        if (keyDown[32]) {
+          // 스페이스바 눌렀을 때
+          점프중 = true;
+        }
+
+        if (점프중 == true) {
+          this.y -= 2;
+          점프timer++;
+        }
+        if (점프중 == false) {
+          if (this.y < canvas.height - this.size) {
+            this.y += 2;
+          }
+        }
+        if (점프timer > 100) {
+          점프중 = false;
+          점프timer = 0;
+        }
         let maxX = canvas.width - this.size;
         let maxY = canvas.height - this.size;
         if (this.x <= 0) this.x = 0;
@@ -86,18 +114,12 @@
         let isCrash = false;
         let goNext = false;
         let isItemBlock = false;
+        let isTrap = false;
+
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
             if (obj.name === '파이프') {
-              console.log("포털탐");
               if (isPotal) {
-                // stage += 1;
-                // console.log("stage = " + stage);
-                // if(stage === 1){
-                //   openNewStage();
-                // } else if(stage === 2){
-                //   openNewStage2();
-                // }
                 goNext = true;
                 stage += 1;
               }
@@ -109,16 +131,28 @@
               isCrash = true;
               isItemBlock = true;
             }
+            if (obj.name === "파이프" && obj.id === 1) {
+              isTrap = true;
+            }
             return false;
           }
         })
+        if (isTrap) {
+          objectList = objectList.filter(obj => obj.id !== 1);
+          objectList.push(new Object('함정파이프', 5, canvas.width - 400, 400, 100, 200));
+          setTimeout(() => {}, 500);
+          this.x = 0;
+          this.y = canvas.height - this.size;
+        }
         if (isCrash) {
           this.x = px;
-          this.y = py;
+          // this.y = py;
+          this.y = canvas.height - this.size;
         }
         if (isItemBlock) {
           setTimeout(() => {
-            objectList = objectList.filter(obj => obj.name !== "아이템벽돌")
+            objectList = objectList.filter(obj => obj.name !== "아이템벽돌");
+            objectList.push(new Object('아이템버섯', 0, 450, 330, 35, 35));
           }, 500);
         }
         if (goNext) {
@@ -168,8 +202,9 @@
     }
 
     class Object {
-      constructor(name, x, y, width, height, color) {
+      constructor(name, id, x, y, width, height, color) {
         this.name = name;
+        this.id = id;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -196,17 +231,26 @@
       renderItemBlock(ctx) {
         ctx.drawImage(아이템벽돌, this.x, this.y, this.width, this.height);
       }
+
+      renderItemMushroom(ctx) {
+        ctx.drawImage(아이템버섯, this.x, this.y, this.width, this.height);
+      }
+
+      renderTrapPipe(ctx) {
+
+      }
     }
 
     let player = new Player();
 
     function add() {
-      objectList.push(new Object('벽돌', 100, 400, 50, 50));
-      objectList.push(new Object('벽돌', 145, 400, 50, 50));
-      objectList.push(new Object('벽돌', 350, 350, 50, 50));
-      objectList.push(new Object('벽돌', 395, 350, 50, 50));
-      objectList.push(new Object('아이템벽돌', 445, 350, 50, 50));
-      objectList.push(new Object('파이프', canvas.width - 100, 400, 100, 200, 'pink'));
+      objectList.push(new Object('벽돌', 0, 100, 400, 50, 50));
+      objectList.push(new Object('벽돌', 0, 145, 400, 50, 50));
+      objectList.push(new Object('벽돌', 0, 350, 350, 50, 50));
+      objectList.push(new Object('벽돌', 0, 395, 350, 50, 50));
+      objectList.push(new Object('아이템벽돌', 0, 445, 350, 50, 50));
+      objectList.push(new Object('파이프', 1, canvas.width - 400, 400, 100, 200));
+      objectList.push(new Object('파이프', 2, canvas.width - 100, 400, 100, 200));
       console.log(objectList);
       objectList.forEach((e) => {
         console.log(e.x);
@@ -216,10 +260,16 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      backX += 1;
       if (stage == 0) {
-        ctx.drawImage(배경, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(배경, backX, 0, canvas.width, canvas.height);
+        ctx.drawImage(배경, backX - canvas.width, 0, canvas.width, canvas.height);
       } else if (stage == 1) {
-        ctx.drawImage(배경2, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(배경2, backX, 0, canvas.width, canvas.height);
+        ctx.drawImage(배경2, backX - canvas.width, 0, canvas.width, canvas.height);
+      }
+      if (backX == canvas.width) {
+        backX = 0;
       }
       objectList.forEach((e) => {
         if (e.name == '파이프') {
@@ -228,6 +278,8 @@
           e.renderBlock(ctx);
         } else if (e.name == '아이템벽돌') {
           e.renderItemBlock(ctx);
+        } else if (e.name == '아이템버섯') {
+          e.renderItemMushroom(ctx);
         }
       })
       player.render(ctx);
@@ -238,8 +290,8 @@
       player.x = 0;
       player.y = canvas.height - player.size;
       objectList = [];
-      objectList.push(new Object('벽돌', canvas.width / 2, canvas.height / 2, 400, 200, 'green'));
-      objectList.push(new Object('파이프', canvas.width - 100, 400, 100, 150, 'pink'));
+      objectList.push(new Object('벽돌', 0, canvas.width / 2, canvas.height / 2, 400, 200, 'green'));
+      objectList.push(new Object('파이프', 2, canvas.width - 100, 400, 100, 150, 'pink'));
       console.log(objectList);
     }
 
@@ -247,8 +299,8 @@
       player.x = 0;
       player.y = canvas.height - player.size;
       objectList = [];
-      objectList.push(new Object('벽돌', 300, canvas.height / 2, 400, 200, 'gray'));
-      objectList.push(new Object('파이프', canvas.width - 100, 400, 100, 150, 'pink'));
+      objectList.push(new Object('벽돌', 0, 300, canvas.height / 2, 400, 200, 'gray'));
+      objectList.push(new Object('파이프', 2, canvas.width - 100, 400, 100, 150, 'pink'));
       console.log(objectList);
     }
 
