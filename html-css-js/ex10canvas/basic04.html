@@ -22,6 +22,8 @@
   const canvas = document.querySelector("#canvas");
   const ctx = canvas.getContext("2d");
 
+  const img = new Image();
+  img.src = './쪼렙마리오.png';
   let radius = 10;
   let num = radius;
   ctx.beginPath();
@@ -34,6 +36,7 @@
   move = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // 움직이는것처럼 보여짐
     ctx.beginPath();
+    ctx.drawImage(img , num , 200 , 50, 50)
     ctx.arc(num, 200, radius, 0, 2 * Math.PI);
     ctx.fillStyle = "green";
     ctx.fill(); // 채우는 거라서 채우는 fill로 끝나야 함.
