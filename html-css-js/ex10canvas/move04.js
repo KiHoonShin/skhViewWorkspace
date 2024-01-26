@@ -77,8 +77,16 @@ function init() {
 
 function inEnemy(px, py, enemy) {
 
+  // return (enemy.x < px && px < enemy.x + enemy.size) &&
+  //   (enemy.y < py && py < enemy.y + enemy.size)
+
+  // 밟았을때만 
+  // return (enemy.x < px && px < enemy.x + enemy.size) &&
+  //   (enemy.y === py);
+
+  // 머리 박았을때만
   return (enemy.x < px && px < enemy.x + enemy.size) &&
-    (enemy.y < py && py < enemy.y + enemy.size)
+    (enemy.y + enemy.size >= py && py >= enemy.y + enemy.size - 25);
 }
 
 function collison(enemy) {
