@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jumping and Moving Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const player = {
+      x: 50,
+      y: canvas.height - 30,
+      width: 30,
+      height: 30,
+      color: 'red',
+      canJump: true,
+      jumpHeight: 70,
+      jumpVelocity: 5,
+      gravity: 0.3,
+      moveSpeed: 5,
+      movingLeft: false,
+      movingRight: false,
+    };
+
+    const obstacles = [{
+        x: 200,
+        y: canvas.height - 50,
+        width: 50,
+        height: 20,
+        color: 'blue'
+      },
+      {
+        x: 400,
+        y: canvas.height - 80,
+        width: 50,
+        height: 50,
+        color: 'green'
+      },
+      // Add more obstacles as needed
+    ];
+
+    let intervalId;
+
+    function draw() {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw player
+      ctx.fillStyle = player.color;
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+
+      // Draw obstacles
+      obstacles.forEach(obstacle => {
+        ctx.fillStyle = obstacle.color;
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+      });
+    }
+
+    function jump() {
+      if (player.canJump) {
+        player.canJump = false;
+        const jumpInterval = setInterval(() => {
+          // Horizontal movement during jump
+          if (player.movingLeft) {
+            player.x -= player.moveSpeed;
+          } else if (player.movingRight) {
+            player.x += player.moveSpeed;
+          }
+
+          // Vertical movement during jump
+          player.y -= player.jumpVelocity;
+          if (player.y <= canvas.height - player.jumpHeight) {
+            clearInterval(jumpInterval);
+            fall();
+          }
+        }, 10); // 0.01 seconds
+      }
+    }
+
+    function fall() {
+      const fallInterval = setInterval(() => {
+        // Check collision with obstacles
+        let obstacleBelow = false;
+        obstacles.forEach(obstacle => {
+          if (
+            player.x < obstacle.x + obstacle.width &&
+            player.x + player.width > obstacle.x &&
+            player.y + player.height >= obstacle.y &&
+            player.y < obstacle.y + obstacle.height
+          ) {
+            // If there's an obstacle below, stop falling
+            if (player.jumpHeight > obstacle.y) {
+              obstacleBelow = true;
+              clearInterval(fallInterval);
+              player.y = obstacle.y - player.height;
+              player.canJump = true;
+            }
+          }
+        });
+
+        if (!obstacleBelow) {
+          // If no obstacle below, continue falling
+          player.y += player.jumpVelocity;
+
+          // Check collision with obstacles while falling
+          obstacles.forEach(obstacle => {
+            if (
+              player.x < obstacle.x + obstacle.width &&
+              player.x + player.width > obstacle.x &&
+              player.y + player.height >= obstacle.y &&
+              player.y < obstacle.y + obstacle.height
+            ) {
+              // If there's an obstacle, stop falling
+              clearInterval(fallInterval);
+              player.y = obstacle.y - player.height;
+              player.canJump = true;
+            }
+          });
+
+          if (player.y >= canvas.height - player.height) {
+            clearInterval(fallInterval);
+            player.y = canvas.height - player.height;
+            player.canJump = true;
+          }
+        }
+      }, 10); // 0.01 seconds
+    }
+
+    function moveRight() {
+      player.movingRight = true;
+      player.x += player.moveSpeed;
+
+      // Prevent player from going out of the canvas
+      if (player.x > canvas.width - player.width) {
+        player.x = canvas.width - player.width;
+      }
+    }
+
+    function moveLeft() {
+      player.movingLeft = true;
+      player.x -= player.moveSpeed;
+
+      // Prevent player from going out of the canvas
+      if (player.x < 0) {
+        player.x = 0;
+      }
+    }
+
+    function stopMoving() {
+      player.movingLeft = false;
+      player.movingRight = false;
+    }
+
+    function handleKeyEvents(event) {
+      if (event.code === 'Space') {
+        jump();
+      } else if (event.code === 'ArrowRight') {
+        moveRight();
+      } else if (event.code === 'ArrowLeft') {
+        moveLeft();
+      }
+    }
+
+    function handleKeyRelease(event) {
+      if (event.code === 'ArrowRight' || event.code === 'ArrowLeft') {
+        stopMoving();
+      }
+    }
+
+    function update() {
+      draw();
+    }
+
+    document.addEventListener('keydown', handleKeyEvents);
+    document.addEventListener('keyup', handleKeyRelease);
+
+    // Start the interval
+    intervalId = setInterval(update, 10); // 0.01 seconds
+  </script>
+</body>
+
+</html>

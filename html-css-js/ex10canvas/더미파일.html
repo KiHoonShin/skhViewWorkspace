@@ -6,11 +6,35 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    button {
+      position: absolute;
+      top: 300px;
+      left: 600px;
+      z-index: 10;
+      padding: 40px 80px;
+      font-size: 48px;
+      border-radius: 5px;
+      background-color: white;
+      transform: translate(-50%, -50%);
+      transition: background-color 0.5s;
+    }
+
+    button:hover {
+      border: none;
+      background-color: lightcoral;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
   <canvas id="test" width="1200" height="600"></canvas>
+  <button> Game Start</button>
+
   <script>
+    const startBtn = document.querySelector("button");
     const canvas = document.querySelector('#test');
     const ctx = canvas.getContext('2d');
     let keyDown = {};
@@ -19,9 +43,21 @@
     let 점프timer = 0;
     let 점프중 = false;
     // let isPotal = false;
+    let 마리오커짐 = false; // true 면 커짐
+    let isOver = false;
+
+    const x3 = new Image();
+    x3.src = './x3.png';
+    const x2 = new Image();
+    x2.src = './x2.png';
+    const x1 = new Image();
+    x1.src = './x1.png';
 
     const image = new Image();
     image.src = './쪼렙마리오.png';
+
+    const bigMario = new Image();
+    bigMario.src = './슈퍼마리오.png';
 
     const 벽돌 = new Image();
     벽돌.src = './벽돌.png';
@@ -67,6 +103,7 @@
         this.y = canvas.height - this.size;
         this.speed = 5;
         this.color = 'red';
+        this.life = 3;
       }
 
       movePlayer() {
@@ -105,12 +142,27 @@
           this.y -= 2;
           점프timer++;
         }
+        let onBlock = false;
+        let blockY;
         if (점프중 == false) {
           if (this.y < canvas.height - this.size) {
-            this.y += 2;
+            // this.y += 2;
+            objectList.filter((obj) => {
+              if (obj.name === '벽돌' || obj.name === '아이템벽돌') {
+                if (this.inBottom(obj, this.x, this.y)) {
+                  onBlock = true;
+                  blockY = obj.y;
+                }
+              }
+            })
+            if (onBlock) {
+              this.y = blockY;
+            } else {
+              this.y += 2;
+            }
           }
         }
-        if (점프timer > 100) {
+        if (점프timer > 70) {
           점프중 = false;
           점프timer = 0;
         }
@@ -126,7 +178,8 @@
         let goNext = false;
         let isItemBlock = false;
         let isTrap = false;
-        let isOver = false;
+        let killGumba = false;
+        let isEatItem = false;
 
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
@@ -137,34 +190,116 @@
               }
             }
             if (obj.name === "벽돌") {
-              isCrash = true;
+              // isCrash = true;
             }
             if (obj.name === "아이템벽돌") {
-              isCrash = true;
-              isItemBlock = true;
+              // isCrash = true;
+              // isItemBlock = true;
             }
-            if (obj.name === "파이프" && obj.id === 1) {
+            if (obj.name === "파이프" && obj.id === '함정') {
               isTrap = true;
             }
-            if (obj.name === "굼바" || obj.name === "플라잉굼바") {
-              isOver = true;
+            // if (obj.name === "굼바" || obj.name === "플라잉굼바") {
+            //   isOver = true;
+            // }
+            if (obj.name === "아이템버섯") {
+              // 마리오커짐 = true;
+              // this.size += 30;
+              isEatItem = true;
             }
             return false;
           }
         })
+        objectList.forEach((enemy) => {
+          if (enemy.name === '굼바') {
+            if (this.inBottom(enemy, this.x, this.y)) {
+              killGumba = true;
+            }
+          }
+          if (this.isGumba(enemy)) {
+            // isOver = true;
+            if (마리오커짐) {
+              마리오커짐 = false;
+              this.size = 50;
+            } else {
+              this.life -= 1;
+              isOver = true;
+            }
+            this.x = 0;
+            // this.y = canvas.height - this.size;
+            this.y = canvas.height - 100;
+
+          }
+          if (enemy.name === '벽돌' || enemy.name === '아이템벽돌') {
+            if (this.heading(enemy, this.x, this.y)) {
+              isCrash = true;
+              if (enemy.name == '아이템벽돌') {
+                isItemBlock = true;
+              }
+            }
+            if (this.inBottom(enemy, this.x, this.y)) {
+              // this.y = enemy.y - 50;
+            }
+          }
+        })
+
+        if (isEatItem) {
+          마리오커짐 = true;
+          setTimeout(() => {
+            this.size += 50;
+            if (this.size >= 80) {
+              this.size = 100;
+            }
+          }, 50);
+          objectList = objectList.filter(obj => obj.name !== "아이템버섯");
+        }
+        if (killGumba) {
+          objectList = objectList.filter(obj => obj.name !== "굼바");
+        }
         if (isOver) {
           clearInterval(monsterInterval);
           clearInterval(playGame);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.beginPath();
+          ctx.rect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'black';
+          ctx.fill();
+          if (this.life == 0) {
+            startBtn.style.visibility = "visible";
+            startBtn.innerHTML = "Game Over";
+            setTimeout(() => {
+              startBtn.innerHTML = "Game Start";
+            }, 1000);
+          } else {
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // ctx.beginPath();
+            // ctx.rect(0, 0, canvas.width, canvas.height);
+            // ctx.fillStyle = 'black';
+            // ctx.fill();
+            if (this.life == 2) {
+              ctx.drawImage(x2, canvas.width / 2 - this.size, canvas.height / 2 - this.size, 100, 80);
+            } else if (this.life == 1) {
+              ctx.drawImage(x1, canvas.width / 2 - this.size, canvas.height / 2 - this.size, 100, 80);
+            }
+            // setTimeout(() => {
+            //   ctx.drawImage(x2, canvas.width / 2 - this.size, canvas.height / 2 - this.size, 100, 80);
+            // }, 1000);
+            setTimeout(() => {
+              isOver = false;
+              monsterInterval = setInterval(monsterMove, 10);
+              playGame = setInterval(draw, 10);
+            }, 3000);
+          }
         }
         if (isTrap) {
           objectList.filter((obj) => {
-            if (obj.id === 1) {
+            if (obj.id === '함정') {
               objectList.push(new Object('피라냐식물', 5, obj.x, obj.y - 100, 100, 100));
             }
           });
           setTimeout(() => {
             objectList = objectList.filter(obj => obj.name !== "피라냐식물");
-          }, 100);
+          }, 300);
           this.x = 0;
           this.y = canvas.height - this.size;
         }
@@ -194,7 +329,46 @@
         }
       }
 
+      isGumba(enemy) {
+        if (enemy.name === '굼바') {
+          // if (player.x < enemy.x + enemy.width && player.x + player.size > enemy.x &&
+          //   player.y === enemy.y) {
+          //   return true;
+          // }
+          if (player.x < enemy.x + enemy.width && player.x + player.size > enemy.x &&
+            player.y + player.size > enemy.y) {
+            return true;
+          }
+        }
+        if (enemy.name === '플라잉굼바') {
+          if (player.x < enemy.x + enemy.width && player.x + player.size > enemy.x &&
+            player.y < enemy.y + enemy.width) {
+            return true;
+          }
+        }
+      }
+
+      밟았을때
+      inBottom(obj, px, py) {
+        if ((obj.x < px && px < obj.x + obj.width) &&
+          (obj.y <= py && py < obj.y + 10)) {
+          return true;
+        }
+        return false;
+      }
+
+      // 머리 부딪혔을때
+      heading(obj, px, py) {
+        if ((obj.x < px && px < obj.x + obj.width) &&
+          (obj.y + obj.height - 25 < py && py <= obj.y + obj.width)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
       collision(obj) {
+
         if (this.inRect(obj, this.x, this.y)) {
           return true;
         }
@@ -215,11 +389,13 @@
 
       render(ctx) {
         this.movePlayer();
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        ctx.drawImage(image, this.x, this.y, this.size, this.size);
-        // ctx.rect(this.x, this.y, this.size, this.size);
-        ctx.fill();
+        if (!isOver) {
+          if (!마리오커짐) {
+            ctx.drawImage(image, this.x, this.y, this.size, this.size);
+          } else {
+            ctx.drawImage(bigMario, this.x, this.y, this.size, this.size);
+          }
+        }
       }
     }
 
@@ -236,8 +412,6 @@
 
       render(ctx) { // 파이프용
         ctx.beginPath();
-        // ctx.fillStyle = this.color;
-        // ctx.rect(this.x, this.y, this.width, this.height);
         ctx.drawImage(파이프, this.x, this.y, this.width, this.height);
         ctx.fill();
       }
@@ -277,15 +451,16 @@
       objectList.push(new Object('벽돌', 0, 145, 400, 50, 50));
       objectList.push(new Object('벽돌', 0, 350, 350, 50, 50));
       objectList.push(new Object('벽돌', 0, 395, 350, 50, 50));
-      objectList.push(new Object('아이템벽돌', 0, 445, 350, 50, 50));
+      objectList.push(new Object('아이템벽돌', '아이템벽돌', 445, 350, 50, 50));
       objectList.push(new Object('굼바', 6, 200, canvas.height - 30, 30, 30));
       objectList.push(new Object('플라잉굼바', 7, 100, 200, 40, 40));
-      objectList.push(new Object('파이프', 1, canvas.width - 400, 400, 100, 200));
-      objectList.push(new Object('파이프', 2, canvas.width - 100, 400, 100, 200));
+      objectList.push(new Object('파이프', '함정', canvas.width - 400, 400, 100, 200));
+      objectList.push(new Object('파이프', 0, canvas.width - 100, 400, 100, 200));
       console.log(objectList);
       objectList.forEach((e) => {
         console.log(e.x);
       })
+
     }
 
 
@@ -303,9 +478,7 @@
         backX = 0;
       }
       objectList.forEach((e) => {
-        if (e.name == '파이프') {
-          e.render(ctx)
-        } else if (e.name == '벽돌') {
+        if (e.name == '벽돌') {
           e.renderBlock(ctx);
         } else if (e.name == '아이템벽돌') {
           e.renderItemBlock(ctx);
@@ -317,6 +490,8 @@
           e.renderGumBa(ctx);
         } else if (e.name == '플라잉굼바') {
           e.renderFlyingGumBa(ctx);
+        } else if (e.name == '파이프') {
+          e.render(ctx)
         }
       })
       player.render(ctx);
@@ -324,6 +499,7 @@
 
     let back = false;
     let flyingBack = false;
+    let itemBack = false;
 
     function monsterMove() {
       // objectList.push(new Object('굼바', 6, 0, canvas.height - 50, 100, 100));
@@ -366,6 +542,25 @@
           if (obj.x == obj.width) {
             flyingBack = false;
           }
+        } else if (obj.name === "아이템버섯") {
+          setTimeout(() => {
+            obj.y += 5;
+            if (obj.y >= canvas.height - obj.height) {
+              obj.y = canvas.height - obj.height;
+            }
+          }, 100);
+          // obj.y = canvas.height - obj.height;
+          if (!itemBack) {
+            obj.x += 2;
+          } else {
+            obj.x -= 2;
+          }
+          if (obj.x >= 700) {
+            itemBack = true;
+          }
+          if (obj.x <= obj.width) {
+            itemBack = false;
+          }
         }
       })
     }
@@ -389,9 +584,20 @@
     }
 
 
-    add();
-    let monsterInterval = setInterval(monsterMove, 10);
-    let playGame = setInterval(draw, 10);
+    startBtn.addEventListener('click', gameStart);
+    let monsterInterval = null;
+    let playGame = null;
+
+    function gameStart() {
+      player.life = 3;
+      isOver = false;
+      startBtn.style.visibility = "hidden";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      objectList = [];
+      add();
+      monsterInterval = setInterval(monsterMove, 10);
+      playGame = setInterval(draw, 10);
+    }
   </script>
 </body>
 
