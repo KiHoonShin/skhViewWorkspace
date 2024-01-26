@@ -82,6 +82,9 @@
     const 아이템버섯 = new Image();
     아이템버섯.src = './아이템버섯.png';
 
+    const oneUp = new Image();
+    oneUp.src = './목숨1up.png';
+
     const 굼바 = new Image();
     굼바.src = './굼바.png';
 
@@ -180,6 +183,8 @@
         let isTrap = false;
         let killGumba = false;
         let isEatItem = false;
+        let breakBlock = false;
+        let findId;
 
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
@@ -231,17 +236,24 @@
 
           }
           if (enemy.name === '벽돌' || enemy.name === '아이템벽돌') {
-            if (this.heading(enemy, this.x, this.y)) {
+            if (this.heading(enemy, this.x, this.y) && !마리오커짐) {
               isCrash = true;
               if (enemy.name == '아이템벽돌') {
                 isItemBlock = true;
               }
+            } else if (this.heading(enemy, this.x, this.y) && 마리오커짐) {
+              breakBlock = true;
+              findId = enemy.id;
             }
             if (this.inBottom(enemy, this.x, this.y)) {
               // this.y = enemy.y - 50;
             }
           }
         })
+
+        if (breakBlock) {
+          objectList = objectList.filter(obj => obj.id !== findId);
+        }
 
         if (isEatItem) {
           마리오커짐 = true;
@@ -252,6 +264,10 @@
             }
           }, 50);
           objectList = objectList.filter(obj => obj.name !== "아이템버섯");
+          objectList.push(new Object('oneUp', 5, 600, 300, 100, 100));
+          setTimeout(() => {
+            objectList = objectList.filter(obj => obj.name !== "oneUp");
+          }, 1000);
         }
         if (killGumba) {
           objectList = objectList.filter(obj => obj.name !== "굼바");
@@ -442,15 +458,18 @@
       renderFlyingGumBa(ctx) {
         ctx.drawImage(플라잉굼바, this.x, this.y, this.width, this.height);
       }
+      renderOneUp(ctx) {
+        ctx.drawImage(oneUp, this.x, this.y, this.width, this.height);
+      }
     }
 
     let player = new Player();
 
     function add() {
-      objectList.push(new Object('벽돌', 0, 100, 400, 50, 50));
-      objectList.push(new Object('벽돌', 0, 145, 400, 50, 50));
-      objectList.push(new Object('벽돌', 0, 350, 350, 50, 50));
-      objectList.push(new Object('벽돌', 0, 395, 350, 50, 50));
+      objectList.push(new Object('벽돌', 111, 100, 400, 50, 50));
+      objectList.push(new Object('벽돌', 112, 145, 400, 50, 50));
+      objectList.push(new Object('벽돌', 113, 350, 350, 50, 50));
+      objectList.push(new Object('벽돌', 114, 395, 350, 50, 50));
       objectList.push(new Object('아이템벽돌', '아이템벽돌', 445, 350, 50, 50));
       objectList.push(new Object('굼바', 6, 200, canvas.height - 30, 30, 30));
       objectList.push(new Object('플라잉굼바', 7, 100, 200, 40, 40));
@@ -492,6 +511,8 @@
           e.renderFlyingGumBa(ctx);
         } else if (e.name == '파이프') {
           e.render(ctx)
+        } else if (e.name == 'oneUp') {
+          e.renderOneUp(ctx);
         }
       })
       player.render(ctx);
