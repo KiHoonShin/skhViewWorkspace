@@ -49,6 +49,9 @@
     const 굼바 = new Image();
     굼바.src = './굼바.png';
 
+    const 플라잉굼바 = new Image();
+    플라잉굼바.src = './플라잉굼바.png';
+
     addEventListener('keydown', (e) => {
       keyDown[e.keyCode] = true;
     })
@@ -123,6 +126,7 @@
         let goNext = false;
         let isItemBlock = false;
         let isTrap = false;
+        let isOver = false;
 
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
@@ -142,9 +146,16 @@
             if (obj.name === "파이프" && obj.id === 1) {
               isTrap = true;
             }
+            if (obj.name === "굼바" || obj.name === "플라잉굼바") {
+              isOver = true;
+            }
             return false;
           }
         })
+        if (isOver) {
+          clearInterval(monsterInterval);
+          clearInterval(playGame);
+        }
         if (isTrap) {
           objectList.filter((obj) => {
             if (obj.id === 1) {
@@ -184,8 +195,6 @@
       }
 
       collision(obj) {
-
-
         if (this.inRect(obj, this.x, this.y)) {
           return true;
         }
@@ -256,6 +265,9 @@
       renderGumBa(ctx) {
         ctx.drawImage(굼바, this.x, this.y, this.width, this.height);
       }
+      renderFlyingGumBa(ctx) {
+        ctx.drawImage(플라잉굼바, this.x, this.y, this.width, this.height);
+      }
     }
 
     let player = new Player();
@@ -267,6 +279,7 @@
       objectList.push(new Object('벽돌', 0, 395, 350, 50, 50));
       objectList.push(new Object('아이템벽돌', 0, 445, 350, 50, 50));
       objectList.push(new Object('굼바', 6, 200, canvas.height - 30, 30, 30));
+      objectList.push(new Object('플라잉굼바', 7, 100, 200, 40, 40));
       objectList.push(new Object('파이프', 1, canvas.width - 400, 400, 100, 200));
       objectList.push(new Object('파이프', 2, canvas.width - 100, 400, 100, 200));
       console.log(objectList);
@@ -302,32 +315,56 @@
           e.renderTrapPipe(ctx);
         } else if (e.name == '굼바') {
           e.renderGumBa(ctx);
+        } else if (e.name == '플라잉굼바') {
+          e.renderFlyingGumBa(ctx);
         }
       })
       player.render(ctx);
     }
 
     let back = false;
+    let flyingBack = false;
 
     function monsterMove() {
       // objectList.push(new Object('굼바', 6, 0, canvas.height - 50, 100, 100));
       // ctx.drawImage(굼바, this.x, this.y, this.width, this.height);
 
-      let gx = 0;
-      let gy = 0;
-
       objectList.filter((obj) => {
         if (obj.name === "굼바") {
           if (!back) {
-            obj.x += 1;
+            obj.x += 2;
           } else {
-            obj.x -= 1;
+            obj.x -= 2;
           }
           if (obj.x == canvas.width - obj.width) {
             back = true;
           }
           if (obj.x == obj.width) {
             back = false;
+          }
+        } else if (obj.name === '플라잉굼바') {
+          if (!flyingBack) {
+            obj.x += 1.5;
+          } else {
+            obj.x -= 1.5;
+          }
+
+          // 위 아래로 날아다니는 굼바 구현
+          setTimeout(() => {
+            obj.y -= 0.5;
+          }, 70);
+
+          if (obj.y < 195) {
+            setTimeout(() => {
+              obj.y += 3;
+            }, 60);
+          }
+
+          if (obj.x >= canvas.width - obj.width) {
+            flyingBack = true;
+          }
+          if (obj.x == obj.width) {
+            flyingBack = false;
           }
         }
       })
@@ -353,8 +390,8 @@
 
 
     add();
-    setInterval(monsterMove, 10);
-    setInterval(draw, 10);
+    let monsterInterval = setInterval(monsterMove, 10);
+    let playGame = setInterval(draw, 10);
   </script>
 </body>
 
