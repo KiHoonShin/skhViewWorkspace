@@ -26,15 +26,67 @@
       color: white;
       cursor: pointer;
     }
+
+    .count {
+      position: absolute;
+      top: 10px;
+      left: 600px;
+      z-index: 10;
+      font-size: 30px;
+      font-weight: bold;
+      color: rgba(51, 50, 50, 0.895);
+      visibility: hidden;
+    }
+
+    .show {
+      position: absolute;
+      top: 300px;
+      left: 600px;
+      z-index: 10;
+      padding: 20px 120px;
+      font-size: 40px;
+      border-radius: 7px;
+      background-color: rgba(220, 66, 66, 0.824);
+      color: white;
+      transform: translate(-50%, -50%);
+      transition: background-color 0.5s;
+      visibility: hidden;
+    }
+
+    .clear {
+      position: absolute;
+      top: 300px;
+      left: 600px;
+      z-index: 10;
+      padding: 20px 120px;
+      font-size: 40px;
+      border-radius: 7px;
+      background-color: rgba(220, 66, 66, 0.824);
+      color: white;
+      transform: translate(-50%, -50%);
+      transition: background-color 0.5s;
+      visibility: hidden;
+    }
   </style>
 </head>
 
 <body>
   <canvas id="test" width="1200" height="600"></canvas>
   <button> Start Game </button>
-
+  <div class="count">
+    <span> 0 / 4 </span>
+  </div>
+  <div class="show">
+    <span> 별을 다 모으고 다시 오세요 ! </span>
+  </div>
+  <div class="clear">
+    <span> Stage Clear ! </span>
+  </div>
   <script>
     const startBtn = document.querySelector("button");
+    const count = document.querySelector(".count");
+    const show = document.querySelector(".show");
+    const clear = document.querySelector(".clear");
     const canvas = document.querySelector('#test');
     const ctx = canvas.getContext('2d');
     let keyDown = {};
@@ -46,9 +98,14 @@
     let 마리오커짐 = false; // true 면 커짐
     let isOver = false;
     let isGreen = false; // true면 루이지로 바뀜
+    let eatStarCount = 0;
 
     const 시작화면 = new Image();
     시작화면.src = './시작화면.PNG';
+
+    const 메인화면 = new Image();
+    메인화면.src = './메인화면.jpg';
+
     const x3 = new Image();
     x3.src = './x3.png';
     const x2 = new Image();
@@ -99,6 +156,30 @@
 
     const 플라잉굼바 = new Image();
     플라잉굼바.src = './플라잉굼바.png';
+
+    const 태양 = new Image();
+    태양.src = './태양.png';
+
+    const 문 = new Image();
+    문.src = './문.png';
+
+    const 자물쇠 = new Image();
+    자물쇠.src = './자물쇠.png';
+
+    const 숫자1 = new Image();
+    숫자1.src = './숫자1.png';
+
+    const 숫자2 = new Image();
+    숫자2.src = './숫자2.png';
+
+    const 숫자3 = new Image();
+    숫자3.src = './숫자3.png';
+
+    const 매그넘 = new Image();
+    매그넘.src = './매그넘2.png';
+
+    const 해골몬스터 = new Image();
+    해골몬스터.src = './해골몬스터.png';
 
     addEventListener('keydown', (e) => {
       keyDown[e.keyCode] = true;
@@ -167,8 +248,16 @@
                 if (obj.name === '파이프' && obj.id === '함정') {
                   isTrap = true;
                 } else if (obj.name === '파이프') {
-                  goNext = true;
-                  stage += 1;
+                  if (eatStarCount === 4) {
+                    goNext = true;
+                  } else {
+                    show.style.visibility = 'visible';
+                    setTimeout(() => {
+                      show.style.visibility = 'hidden';
+                    }, 1000);
+                    this.x = 0;
+                  }
+                  // stage += 1;
                 }
                 if (obj.name === '벽돌' || obj.name === '아이템벽돌') {
                   onBlock = true;
@@ -200,6 +289,7 @@
         let isEatItem = false;
         let breakBlock = false;
         let findId;
+        let eatStar = [];
 
         objectList.filter((obj) => {
           if (obj.name === '파이프') {
@@ -211,18 +301,75 @@
 
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
-            // if (obj.name === '파이프') {
-            //   if (isPotal) {
-            //     goNext = true;
-            //     stage += 1;
-            //   }
-            // }
-            if (obj.name === "파이프" && obj.id === '함정') {
-              // isTrap = true;
+            if (obj.name === '매그넘' || obj.name === '해골몬스터') {
+              if (마리오커짐) {
+                마리오커짐 = false;
+                this.size = 50;
+              } else {
+                this.life -= 1;
+                isOver = true;
+              }
+              this.x = 0;
+              // this.y = canvas.height - this.size;
+              this.y = canvas.height - 100;
+            }
+            if (obj.name === '문') {
+              if (obj.id === '스테이지1') {
+                if (stage <= 1) {
+                  openNewStage1();
+                  if (stage === 0) {
+                    stage = 1;
+                  }
+                }
+              } else if (obj.id === '스테이지2') {
+                if (stage >= 2) {
+                  if (obj.id === '스테이지1') {
+                    openNewStage1();
+                  } else if (obj.id === '스테이지2') {
+                    openNewStage2();
+                  }
+                }
+              } else if (obj.id === '스테이지3') {
+                if (stage >= 3) {
+                  if (obj.id === '스테이지1') {
+                    openNewStage1();
+                  } else if (obj.id === '스테이지2') {
+                    openNewStage2();
+                  } else if (obj.id === '스테이지3') {
+                    openNewStage3();
+                  }
+                }
+              }
+              // if (stage <= 1) {
+              //   openNewStage1();
+              //   stage += 1;
+              // }
+              // if (stage >= 2) {
+              //   if (obj.id === '스테이지1') {
+              //     openNewStage1();
+              //   } else if (obj.id === '스테이지2') {
+              //     openNewStage2();
+              //   }
+              // }
+              // if (stage >= 3) {
+              //   if (obj.id === '스테이지1') {
+              //     openNewStage1();
+              //   } else if (obj.id === '스테이지2') {
+              //     openNewStage2();
+              //   } else if (obj.id === '스테이지3') {
+              //     openNewStage3();
+              //   }
+              // }
+            }
+            if (obj.name === '태양') {
+              // console.log(obj.id);
+              eatStar.push(obj.id);
+              console.log(eatStar);
+              eatStarCount += 1;
+              count.innerHTML = `${eatStarCount} / 4`;
+              console.log(eatStarCount);
             }
             if (obj.name === "아이템버섯") {
-              // 마리오커짐 = true;
-              // this.size += 30;
               isEatItem = true;
             } else if (obj.name === '초록버섯') {
               isEatItem = true;
@@ -231,8 +378,14 @@
             return false;
           }
         })
+
+        if (eatStar.length !== 0) {
+          objectList = objectList.filter(obj => eatStar[0] !== obj.id)
+        }
+
         objectList.forEach((obj) => {
-          if (obj.name === '굼바' || obj.name === '플라잉굼바') {
+          if (obj.name === '굼바' || obj.name === '플라잉굼바' || obj.name === '매그넘' ||
+            obj.name === '해골몬스터') {
             if (this.isGumba(obj)) {
               // isOver = true;
               if (마리오커짐) {
@@ -272,7 +425,7 @@
           this.size += 50;
           objectList = objectList.filter(obj => obj.name !== "아이템버섯");
           objectList = objectList.filter(obj => obj.name !== "초록버섯");
-          objectList.push(new Object('oneUp', 5, 600, 300, 100, 100));
+          objectList.push(new Object('oneUp', 5, this.x + 50, this.y - 30, 100, 100));
           setTimeout(() => {
             objectList = objectList.filter(obj => obj.name !== "oneUp");
           }, 1000);
@@ -286,6 +439,7 @@
           ctx.fillStyle = 'black';
           ctx.fill();
           if (this.life == 0) {
+            eatStarCount = 0;
             ctx.drawImage(시작화면, 0, 0, canvas.width, canvas.height);
             startBtn.style.visibility = "visible";
             startBtn.innerHTML = "Game Over";
@@ -345,8 +499,15 @@
           }, 500);
         }
         if (goNext) {
-          if (stage === 1) openNewStage();
-          else if (stage === 2) openNewStage2();
+          stage += 1;
+          clear.style.visibility = 'visible';
+          setTimeout(() => {
+            clear.style.visibility = 'hidden';
+          }, 500);
+          if (stage === 2) openNewStage2();
+          else if (stage === 3) openNewStage3();
+          // openMainStage();
+          eatStarCount = 0;
         }
       }
 
@@ -381,6 +542,9 @@
             return true;
           }
         }
+        // if (enemy.name === '매그넘'){
+
+        // }
         if (enemy.name === '플라잉굼바') {
           if (player.x < enemy.x + enemy.width && player.x + player.size > enemy.x &&
             enemy.y - enemy.height < player.y && player.y < enemy.y) {
@@ -446,7 +610,7 @@
     class Object {
       constructor(name, id, x, y, width, height, color) {
         this.name = name;
-        this.id = id; // id가 1이면 함정 파이프 !
+        this.id = id;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -493,6 +657,36 @@
       renderOneUp(ctx) {
         ctx.drawImage(oneUp, this.x, this.y, this.width, this.height);
       }
+
+      renderDoor(ctx) {
+        ctx.drawImage(문, this.x, this.y, this.width, this.height);
+      }
+
+      renderRock(ctx) {
+        ctx.drawImage(자물쇠, this.x, this.y, this.width, this.height);
+      }
+
+      renderNumberOne(ctx) {
+        ctx.drawImage(숫자1, this.x, this.y, this.width, this.height);
+      }
+      renderNumberTwo(ctx) {
+        ctx.drawImage(숫자2, this.x, this.y, this.width, this.height);
+      }
+      renderNumberThree(ctx) {
+        ctx.drawImage(숫자3, this.x, this.y, this.width, this.height);
+      }
+
+      renderSun(ctx) {
+        ctx.drawImage(태양, this.x, this.y, this.width, this.height);
+      }
+
+      renderMagnum(ctx) {
+        ctx.drawImage(매그넘, this.x, this.y, this.width, this.height);
+      }
+
+      renderSkeleton(ctx) {
+        ctx.drawImage(해골몬스터, this.x, this.y, this.width, this.height);
+      }
     }
 
     let player = new Player();
@@ -507,6 +701,12 @@
       objectList.push(new Object('플라잉굼바', 7, 100, 200, 40, 40));
       objectList.push(new Object('파이프', '함정', canvas.width - 700, 400, 100, 200));
       objectList.push(new Object('파이프', 0, canvas.width - 100, 400, 100, 200));
+
+      objectList.push(new Object('태양', '태양1', 100, 100, 50, 50));
+      objectList.push(new Object('태양', '태양2', 400, 438, 50, 50));
+      objectList.push(new Object('태양', '태양3', 730, 70, 50, 50));
+      objectList.push(new Object('태양', '태양4', 983, 500, 50, 50));
+
       console.log(objectList);
       objectList.forEach((e) => {
         console.log(e.x);
@@ -519,11 +719,15 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       backX += 1;
       if (stage == 0) {
+        ctx.drawImage(메인화면, 0, 0, canvas.width, canvas.height);
+      } else if (stage == 1) {
         ctx.drawImage(배경, backX, 0, canvas.width, canvas.height);
         ctx.drawImage(배경, backX - canvas.width, 0, canvas.width, canvas.height);
-      } else if (stage == 1) {
+      } else if (stage == 2) {
         ctx.drawImage(배경2, backX, 0, canvas.width, canvas.height);
         ctx.drawImage(배경2, backX - canvas.width, 0, canvas.width, canvas.height);
+      } else if (stage == 3) {
+
       }
       if (backX == canvas.width) {
         backX = 0;
@@ -547,6 +751,22 @@
           e.render(ctx)
         } else if (e.name == 'oneUp') {
           e.renderOneUp(ctx);
+        } else if (e.name === '문') {
+          e.renderDoor(ctx);
+        } else if (e.name === '자물쇠') {
+          e.renderRock(ctx);
+        } else if (e.name === '숫자1') {
+          e.renderNumberOne(ctx);
+        } else if (e.name === '숫자2') {
+          e.renderNumberTwo(ctx);
+        } else if (e.name === '숫자3') {
+          e.renderNumberThree(ctx);
+        } else if (e.name === '태양') {
+          e.renderSun(ctx);
+        } else if (e.name === '매그넘') {
+          e.renderMagnum(ctx);
+        } else if (e.name === '해골몬스터') {
+          e.renderSkeleton(ctx);
         }
       })
       player.render(ctx);
@@ -555,6 +775,7 @@
     let back = false;
     let flyingBack = false;
     let itemBack = false;
+    let flyingSkeleton = false;
 
     function monsterMove() {
       // objectList.push(new Object('굼바', 6, 0, canvas.height - 50, 100, 100));
@@ -616,20 +837,103 @@
           if (obj.x <= obj.width) {
             itemBack = false;
           }
+        } else if (obj.name === '매그넘') {
+          obj.x -= 7;
+          if (obj.x <= 0) {
+            obj.x = canvas.width - obj.width;
+          }
+        } else if (obj.name === '해골몬스터') {
+          if (!flyingSkeleton) {
+            obj.x += 1.5;
+          } else {
+            obj.x -= 1.5;
+          }
+
+          // 위 아래로 날아다니는 해골 구현
+          setTimeout(() => {
+            obj.y -= 0.5;
+          }, 70);
+
+          if (obj.y < 250) {
+            setTimeout(() => {
+              obj.y += 5;
+            }, 60);
+          }
+
+          if (obj.x >= canvas.width - obj.width) {
+            flyingSkeleton = true;
+          }
+          if (obj.x == obj.width) {
+            flyingSkeleton = false;
+          }
         }
       })
     }
 
-    function openNewStage() {
+
+    function openMainStage() {
+      count.style.visibility = 'hidden';
+      player.x = 0;
+      player.y = canvas.height - player.size;
+      // ctx.drawImage(메인화면, 0, 0, canvas.width, canvas.height);
+      objectList = [];
+      // 문 3개 , 자물쇠 2개 만들기.
+      // 문에 닿을때 자물쇠가 있으면 못 들어감.
+      // 자물쇠 없으면 해당 스테이지로 이동
+      objectList.push(new Object('문', '스테이지1', 590, 300, 150, 150));
+      objectList.push(new Object('문', '스테이지2', 953, 140, 150, 150));
+      objectList.push(new Object('문', '스테이지3', 950, 450, 150, 150));
+      objectList.push(new Object('자물쇠', '스테이지2', 1013, 108, 30, 30));
+      objectList.push(new Object('자물쇠', '스테이지3', 1010, 420, 30, 30));
+      objectList.push(new Object('숫자1', '스테이지1', 630, 280, 20, 20));
+      objectList.push(new Object('숫자2', '스테이지2', 990, 115, 20, 20));
+      objectList.push(new Object('숫자3', '스테이지3', 980, 423, 30, 30));
+    }
+
+
+    // add를 이걸로 바꾸기
+    function openNewStage1() {
+      count.style.visibility = 'visible';
       player.x = 0;
       player.y = canvas.height - player.size;
       objectList = [];
-      objectList.push(new Object('벽돌', 0, canvas.width / 2, canvas.height / 2, 400, 200, 'green'));
-      objectList.push(new Object('파이프', 2, canvas.width - 100, 400, 100, 150, 'pink'));
-      console.log(objectList);
+      add();
     }
 
     function openNewStage2() {
+      count.innerHTML = '0 / 4';
+      count.style.visibility = 'visible';
+      player.x = 0;
+      player.y = canvas.height - player.size;
+      objectList = [];
+      objectList.push(new Object('벽돌', 111, 100, 400, 50, 50));
+      objectList.push(new Object('벽돌', 112, 145, 400, 50, 50));
+      objectList.push(new Object('벽돌', 113, 745, 250, 50, 50));
+      objectList.push(new Object('벽돌', 114, 790, 250, 50, 50));
+      objectList.push(new Object('아이템벽돌', '아이템벽돌', 835, 250, 50, 50));
+      objectList.push(new Object('굼바', 6, 200, canvas.height - 30, 30, 30));
+      objectList.push(new Object('플라잉굼바', 7, 100, 200, 40, 40));
+      objectList.push(new Object('파이프', '함정', 300, 400, 100, 200));
+      objectList.push(new Object('벽돌', 115, 402, 395, 50, 50));
+      objectList.push(new Object('벽돌', 116, 450, 395, 50, 50));
+      objectList.push(new Object('벽돌', 117, 498, 395, 50, 50));
+      objectList.push(new Object('벽돌', 118, 546, 395, 50, 50));
+      objectList.push(new Object('파이프', 0, 600, 400, 100, 200));
+      objectList.push(new Object('파이프', 0, canvas.width - 100, 400, 100, 200));
+
+      objectList.push(new Object('태양', '태양1', 100, 100, 50, 50));
+      objectList.push(new Object('태양', '태양2', 400, 538, 50, 50));
+      objectList.push(new Object('태양', '태양3', 730, 70, 50, 50));
+      objectList.push(new Object('태양', '태양4', 983, 500, 50, 50));
+      objectList.push(new Object('매그넘', '매그넘', 1000, 100, 70, 50));
+      objectList.push(new Object('해골몬스터', '해골', 1000, canvas.height - 70, 70, 70));
+
+      console.log(objectList);
+    }
+
+    function openNewStage3() {
+      count.innerHTML = '0 / 4';
+      count.style.visibility = 'visible';
       player.x = 0;
       player.y = canvas.height - player.size;
       objectList = [];
@@ -653,7 +957,8 @@
       startBtn.style.visibility = "hidden";
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       objectList = [];
-      add();
+      // openMainStage();
+      openNewStage2();
       monsterInterval = setInterval(monsterMove, 10);
       playGame = setInterval(draw, 10);
     }
