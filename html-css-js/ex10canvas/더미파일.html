@@ -45,6 +45,7 @@
     // let isPotal = false;
     let 마리오커짐 = false; // true 면 커짐
     let isOver = false;
+    let isGreen = false; // true면 루이지로 바뀜
 
     const 시작화면 = new Image();
     시작화면.src = './시작화면.PNG';
@@ -60,6 +61,9 @@
 
     const bigMario = new Image();
     bigMario.src = './슈퍼마리오.png';
+
+    const greenMario = new Image();
+    greenMario.src = './루이지.png';
 
     const 벽돌 = new Image();
     벽돌.src = './벽돌.png';
@@ -83,6 +87,9 @@
 
     const 아이템버섯 = new Image();
     아이템버섯.src = './아이템버섯.png';
+
+    const 초록버섯 = new Image();
+    초록버섯.src = './초록버섯.png';
 
     const oneUp = new Image();
     oneUp.src = './목숨1up.png';
@@ -149,12 +156,21 @@
         }
         let onBlock = false;
         let blockY;
+        let isTrap = false;
+        let goNext = false;
+
         if (점프중 == false) {
           if (this.y < canvas.height - this.size) {
             // this.y += 2;
-            objectList.filter((obj) => {
-              if (obj.name === '벽돌' || obj.name === '아이템벽돌' || obj.name === '파이프') {
-                if (this.inBottom(obj, this.x, this.y)) {
+            objectList.forEach((obj) => {
+              if (this.inBottom(obj, this.x, this.y)) {
+                if (obj.name === '파이프' && obj.id === '함정') {
+                  isTrap = true;
+                } else if (obj.name === '파이프') {
+                  goNext = true;
+                  stage += 1;
+                }
+                if (obj.name === '벽돌' || obj.name === '아이템벽돌') {
                   onBlock = true;
                   blockY = obj.y;
                 }
@@ -178,50 +194,41 @@
         if (this.y <= 0) this.y = 0;
         if (this.y >= maxY) this.y = maxY;
 
-
         let isCrash = false;
-        let goNext = false;
         let isItemBlock = false;
-        let isTrap = false;
         let killGumba = false;
         let isEatItem = false;
         let breakBlock = false;
         let findId;
 
+        objectList.filter((obj) => {
+          if (obj.name === '파이프') {
+            if (this.isPipe(obj)) {
+              this.x = px;
+            }
+          }
+        })
+
         objectList.forEach((obj) => {
           if (this.collision(obj)) {
-            if (obj.name === '파이프') {
-              if (isPotal) {
-                goNext = true;
-                stage += 1;
-              }
-            }
-            if (obj.name === "벽돌") {
-              // isCrash = true;
-            }
-            if (obj.name === "아이템벽돌") {
-              // isCrash = true;
-              // isItemBlock = true;
-            }
-            if (obj.name === "파이프" && obj.id === '함정') {
-              isTrap = true;
-            }
-            // if (obj.name === "굼바" || obj.name === "플라잉굼바") {
-            //   isOver = true;
+            // if (obj.name === '파이프') {
+            //   if (isPotal) {
+            //     goNext = true;
+            //     stage += 1;
+            //   }
             // }
+            if (obj.name === "파이프" && obj.id === '함정') {
+              // isTrap = true;
+            }
             if (obj.name === "아이템버섯") {
               // 마리오커짐 = true;
               // this.size += 30;
               isEatItem = true;
+            } else if (obj.name === '초록버섯') {
+              isEatItem = true;
+              isGreen = true;
             }
             return false;
-          }
-        })
-        objectList.forEach((enemy) => {
-          if (enemy.name === '굼바') {
-            if (this.inBottom(enemy, this.x, this.y)) {
-              killGumba = true;
-            }
           }
         })
         objectList.forEach((obj) => {
@@ -243,11 +250,6 @@
           }
         })
         objectList.forEach((enemy) => {
-          if (enemy.name === '굼바') {
-            if (this.inBottom(enemy, this.x, this.y)) {
-              killGumba = true;
-            }
-          }
           if (enemy.name === '벽돌' || enemy.name === '아이템벽돌') {
             if (this.heading(enemy, this.x, this.y) && !마리오커짐) {
               isCrash = true;
@@ -258,9 +260,6 @@
               breakBlock = true;
               findId = enemy.id;
             }
-            if (this.inBottom(enemy, this.x, this.y)) {
-              // this.y = enemy.y - 50;
-            }
           }
         })
 
@@ -270,20 +269,13 @@
 
         if (isEatItem) {
           마리오커짐 = true;
-          setTimeout(() => {
-            this.size += 50;
-            if (this.size >= 80) {
-              this.size = 100;
-            }
-          }, 50);
+          this.size += 50;
           objectList = objectList.filter(obj => obj.name !== "아이템버섯");
+          objectList = objectList.filter(obj => obj.name !== "초록버섯");
           objectList.push(new Object('oneUp', 5, 600, 300, 100, 100));
           setTimeout(() => {
             objectList = objectList.filter(obj => obj.name !== "oneUp");
           }, 1000);
-        }
-        if (killGumba) {
-          objectList = objectList.filter(obj => obj.name !== "굼바");
         }
         if (isOver) {
           clearInterval(monsterInterval);
@@ -330,10 +322,26 @@
           // this.y = py;
           this.y = canvas.height - this.size;
         }
+
+        // 아이템 버섯이 나오는 벽돌의 x , y값 구하기
+        let itemBlockX;
+        let itemBlockY;
+        objectList.filter((obj) => {
+          if (obj.name === '아이템벽돌') {
+            itemBlockX = obj.x;
+            itemBlockY = obj.y;
+          }
+        })
+
         if (isItemBlock) {
+          let rNum = Math.floor(Math.random() * 2);
           setTimeout(() => {
             objectList = objectList.filter(obj => obj.name !== "아이템벽돌");
-            objectList.push(new Object('아이템버섯', 0, 450, 330, 35, 35));
+            if (rNum == 0) {
+              objectList.push(new Object('아이템버섯', 0, itemBlockX, itemBlockY, 35, 35));
+            } else {
+              objectList.push(new Object('초록버섯', 0, itemBlockX, itemBlockY, 35, 35));
+            }
           }, 500);
         }
         if (goNext) {
@@ -351,7 +359,16 @@
         }
       }
 
-
+      isPipe(obj) {
+        if (player.x < obj.x + obj.width && player.x + player.size > obj.x &&
+          player.y === obj.y) {
+          return true;
+        }
+        if (player.x < obj.x + obj.width && player.x + player.size > obj.x &&
+          player.y + player.size > obj.y) {
+          return true;
+        }
+      }
 
       isGumba(enemy) {
         if (enemy.name === '굼바') {
@@ -374,7 +391,7 @@
 
       밟았을때
       inBottom(obj, px, py) {
-        if ((obj.x < px && px < obj.x + obj.width) &&
+        if ((obj.x - obj.width / 2 < px && px < obj.x + obj.width) &&
           (obj.y <= py && py < obj.y + 10)) {
           return true;
         }
@@ -383,7 +400,7 @@
 
       // 머리 부딪혔을때
       heading(obj, px, py) {
-        if ((obj.x < px && px < obj.x + obj.width) &&
+        if ((obj.x - obj.width / 2 < px && px < obj.x + obj.width) &&
           (obj.y + obj.height - 25 < py && py <= obj.y + obj.width)) {
           return true;
         } else {
@@ -417,7 +434,9 @@
         if (!isOver) {
           if (!마리오커짐) {
             ctx.drawImage(image, this.x, this.y, this.size, this.size);
-          } else {
+          } else if (마리오커짐 && isGreen) {
+            ctx.drawImage(greenMario, this.x, this.y, this.size, this.size);
+          } else if (마리오커짐 && !isGreen) {
             ctx.drawImage(bigMario, this.x, this.y, this.size, this.size);
           }
         }
@@ -457,6 +476,10 @@
         ctx.drawImage(아이템버섯, this.x, this.y, this.width, this.height);
       }
 
+      renderGreenMushroom(ctx) {
+        ctx.drawImage(초록버섯, this.x, this.y, this.width, this.height);
+      }
+
       renderTrapPipe(ctx) {
         ctx.drawImage(피라냐식물, this.x, this.y, this.width, this.height);
       }
@@ -477,12 +500,12 @@
     function add() {
       objectList.push(new Object('벽돌', 111, 100, 400, 50, 50));
       objectList.push(new Object('벽돌', 112, 145, 400, 50, 50));
-      objectList.push(new Object('벽돌', 113, 350, 350, 50, 50));
-      objectList.push(new Object('벽돌', 114, 395, 350, 50, 50));
-      objectList.push(new Object('아이템벽돌', '아이템벽돌', 445, 350, 50, 50));
+      objectList.push(new Object('벽돌', 113, 745, 250, 50, 50));
+      objectList.push(new Object('벽돌', 114, 790, 250, 50, 50));
+      objectList.push(new Object('아이템벽돌', '아이템벽돌', 835, 250, 50, 50));
       objectList.push(new Object('굼바', 6, 200, canvas.height - 30, 30, 30));
       objectList.push(new Object('플라잉굼바', 7, 100, 200, 40, 40));
-      objectList.push(new Object('파이프', '함정', canvas.width - 400, 400, 100, 200));
+      objectList.push(new Object('파이프', '함정', canvas.width - 700, 400, 100, 200));
       objectList.push(new Object('파이프', 0, canvas.width - 100, 400, 100, 200));
       console.log(objectList);
       objectList.forEach((e) => {
@@ -512,6 +535,8 @@
           e.renderItemBlock(ctx);
         } else if (e.name == '아이템버섯') {
           e.renderItemMushroom(ctx);
+        } else if (e.name == '초록버섯') {
+          e.renderGreenMushroom(ctx);
         } else if (e.name == '피라냐식물') {
           e.renderTrapPipe(ctx);
         } else if (e.name == '굼바') {
@@ -572,7 +597,7 @@
           if (obj.x == obj.width) {
             flyingBack = false;
           }
-        } else if (obj.name === "아이템버섯") {
+        } else if (obj.name === "아이템버섯" || obj.name === '초록버섯') {
           setTimeout(() => {
             obj.y += 5;
             if (obj.y >= canvas.height - obj.height) {
@@ -585,7 +610,7 @@
           } else {
             obj.x -= 2;
           }
-          if (obj.x >= 700) {
+          if (obj.x >= 1200 - obj.width) {
             itemBack = true;
           }
           if (obj.x <= obj.width) {
